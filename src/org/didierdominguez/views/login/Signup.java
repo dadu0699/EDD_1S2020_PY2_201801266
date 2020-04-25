@@ -45,7 +45,7 @@ public class Signup {
         gridPane.add(textTitle, 0, 0);
 
         JFXTextField fieldID = new JFXTextField();
-        fieldID.setPromptText("DPI");
+        fieldID.setPromptText("NÚMERO DE CARNET");
         fieldID.setPrefSize(x, y);
         gridPane.add(fieldID, 0, 1);
 
@@ -54,17 +54,23 @@ public class Signup {
         fieldName.setPrefSize(x, y);
         gridPane.add(fieldName, 0, 2);
 
-        JFXTextField fieldUser = new JFXTextField();
-        fieldUser.setPromptText("USUARIO");
-        fieldUser.setId("fieldUser");
-        fieldUser.setPrefSize(x, y);
-        gridPane.add(fieldUser, 0, 3);
+        JFXTextField fieldLastName = new JFXTextField();
+        fieldLastName.setPromptText("APELLIDO");
+        fieldLastName.setId("fieldLastName");
+        fieldLastName.setPrefSize(x, y);
+        gridPane.add(fieldLastName, 0, 3);
+
+        JFXPasswordField fielCareer = new JFXPasswordField();
+        fielCareer.setPromptText("CARRERA");
+        fielCareer.setId("fieldCareer");
+        fielCareer.setPrefSize(x, y);
+        gridPane.add(fielCareer, 0, 4);
 
         JFXPasswordField fieldPassword = new JFXPasswordField();
         fieldPassword.setPromptText("CONTRASEÑA");
         fieldPassword.setId("fieldPassword");
         fieldPassword.setPrefSize(x, y);
-        gridPane.add(fieldPassword, 0, 4);
+        gridPane.add(fieldPassword, 0, 5);
 
         JFXButton buttonSignUp = new JFXButton("REGISTRARSE");
         buttonSignUp.getStyleClass().addAll("customButton", "primaryButton");
@@ -74,19 +80,20 @@ public class Signup {
             if (fieldID.getText().length() == 0
                     || !Verifications.getInstance().isNumericInteger(fieldID.getText().trim())
                     || fieldName.getText().length() == 0
-                    || fieldUser.getText().length() == 0
+                    || fieldLastName.getText().length() == 0
+                    || fielCareer.getText().length() == 0
                     || fieldPassword.getText().length() == 0) {
                 Alert.getInstance().showAlert(gridPane, "ERROR", "UNO O MÁS DATOS SON INCORRECTOS");
             } else {
                 /*Customer customer = ControllerCustomer.getInstance().searchCustomer(Integer.parseInt(fieldID.getText().trim()));
-                User user = ControllerUser.getInstance().searchUser(fieldUser.getText());
+                User user = ControllerUser.getInstance().searchUser(fieldLastName.getText());
                 if (user != null) {
                     Alert.getInstance().showAlert(gridPane, "ERROR", "EL USUARIO YA ESTÁ EN USO");
                 } else if (customer != null) {
                     Alert.getInstance().showAlert(gridPane, "ERROR", "EL CLIENTE YA ESTÁ REGISTRADO");
                 } else {
                     ControllerCustomer.getInstance().createCustomer(Integer.parseInt(fieldID.getText().trim()),
-                            fieldName.getText().trim().toUpperCase(), false, fieldUser.getText().trim().toUpperCase(),
+                            fieldName.getText().trim().toUpperCase(), false, fieldLastName.getText().trim().toUpperCase(),
                             fieldPassword.getText().trim().toUpperCase());
                     CustomerPanel.getInstance().showWindow(ControllerCustomer.getInstance().searchCustomer(Integer.parseInt(fieldID.getText().trim())));
                     Alert.getInstance().showNotification("REGISTRO", "REGISTRO REALIZADO EXITOSAMENTE");
@@ -94,19 +101,19 @@ public class Signup {
             }
         });
         GridPane.setMargin(buttonSignUp, new Insets(5, 0, 0, 0));
-        gridPane.add(buttonSignUp, 0, 5);
+        gridPane.add(buttonSignUp, 0, 6);
 
         Text label = new Text("¿YA ERES USUARIO?");
         label.getStyleClass().add("textTitlehref");
         GridPane.setHalignment(label, HPos.RIGHT);
         GridPane.setMargin(label, new Insets(-10, 100, 0, 0));
-        gridPane.add(label, 0, 6);
+        gridPane.add(label, 0, 7);
 
         Text text = new Text("INICIAR SESIÓN");
         text.getStyleClass().add("texthref");
         GridPane.setHalignment(text, HPos.RIGHT);
         GridPane.setMargin(text, new Insets(-10, 0, 0, 0));
-        gridPane.add(text, 0, 6);
+        gridPane.add(text, 0, 7);
         text.setOnMouseClicked(event -> Login.getInstance().showWindow());
 
         return gridPane;
@@ -120,7 +127,7 @@ public class Signup {
 
         stage.hide();
         stage.setWidth(480);
-        stage.setHeight(335);
+        stage.setHeight(375);
         stage.setMaximized(false);
 
         root.getChildren().addAll(getSignup());
