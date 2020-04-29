@@ -86,16 +86,9 @@ public class UserView extends Stage {
         buttonFile.setButtonType(JFXButton.ButtonType.FLAT);
         buttonFile.setPrefSize(x, y);
         buttonFile.setOnAction(event -> {
-            /*
-             * FileControl.getInstance().uploadFile("UserFile", "*.tme"); ArrayList<String>
-             * arrayList = FileControl.getInstance().readFile(); if (arrayList != null) {
-             * for (String command : arrayList) { String[] params = command.split("-");
-             * boolean userRole = params[1].equals("ADMINISTRADOR");
-             * //ControllerUser.getInstance().createUser(params[0], params[1], params[2],
-             * params[3], userRole); } updateTableViewItems();
-             * Alert.getInstance().showNotification("EMPLEADOS",
-             * "ARCHIVO LEIDO EXITOSAMENTE"); }
-             */
+            FileControl.getInstance().uploadFile("User File", "*.json");
+            FileControl.getInstance().readUserJSON();
+            updateTableViewItems();
         });
 
         JFXButton buttonAdd = new JFXButton("AGREGAR");
