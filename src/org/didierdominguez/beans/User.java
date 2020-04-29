@@ -6,6 +6,7 @@ public class User {
     private String lastName;
     private String career;
     private String password;
+    private User nextUser;
 
     public User(int id, String name, String lastName, String career, String password) {
         this.id = id;
@@ -13,6 +14,7 @@ public class User {
         this.lastName = lastName;
         this.career = career;
         this.password = password;
+        nextUser = null;
     }
 
     public int getID() {
@@ -53,5 +55,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public User getNextUser() {
+        return nextUser;
+    }
+
+    public void setNextUser(User nextUser) {
+        this.nextUser = nextUser;
     }
 }

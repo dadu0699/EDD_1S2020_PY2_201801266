@@ -5,7 +5,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.didierdominguez.views.login.Login;
+import org.didierdominguez.util.HashGenerator;
+import org.didierdominguez.views.panel.AdministrativePanel;
 
 public class Main extends Application {
     private static Stage stage;
@@ -13,7 +14,7 @@ public class Main extends Application {
     private static JFXDecorator decorator;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         root = new VBox();
 
@@ -23,8 +24,11 @@ public class Main extends Application {
         stage.setTitle("Library");
         stage.setResizable(false);
         stage.setScene(scene);
+        stage.centerOnScreen();
+        stage.setMaximized(true);
 
-        root.getChildren().addAll(Login.getInstance().getLogin());
+        // root.getChildren().addAll(Login.getInstance().getLogin());
+        root.getChildren().addAll(AdministrativePanel.getInstance().getPane());
         stage.centerOnScreen();
         stage.show();
     }
