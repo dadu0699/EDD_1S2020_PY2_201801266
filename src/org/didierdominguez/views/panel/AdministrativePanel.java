@@ -34,14 +34,13 @@ public class AdministrativePanel {
         hBox.setPrefSize(x, y);
         vBoxButtons.setPrefSize((x / 4), y);
         vBoxPanels.setPrefSize((3 * x / 4), y);
-        //vBoxPanels.getChildren().add(ViewEmployee.getInstance().getViewEmployee());
+        vBoxPanels.getChildren().add(UserView.getInstance().getViewUser());
 
         JFXButton buttonHeader = new JFXButton(" USAC\nLibrary");
         buttonHeader.setDisable(true);
         buttonHeader.getStyleClass().addAll("headerButton", "panelButton");
         buttonHeader.setPrefSize(x, 2 * y / 8);
         buttonHeader.setButtonType(JFXButton.ButtonType.FLAT);
-
 
         JFXButton btnUsers = new JFXButton("USUARIOS");
         btnUsers.setId("btnUsers");
@@ -52,7 +51,7 @@ public class AdministrativePanel {
         btnUsers.setOnAction(event -> {
             selectButton(btnUsers);
             vBoxPanels.getChildren().clear();
-            //vBoxPanels.getChildren().add(ViewService.getInstance().getViewService());
+            vBoxPanels.getChildren().add(UserView.getInstance().getViewUser());
         });
 
         JFXButton btnBooks = new JFXButton("LIBROS");
@@ -63,7 +62,7 @@ public class AdministrativePanel {
         btnBooks.setOnAction(event -> {
             selectButton(btnBooks);
             vBoxPanels.getChildren().clear();
-            //vBoxPanels.getChildren().add(ViewEmployee.getInstance().getViewEmployee());
+            // vBoxPanels.getChildren().add(ViewEmployee.getInstance().getViewEmployee());
         });
 
         JFXButton btnCategories = new JFXButton("CATEGORIAS");
@@ -74,7 +73,7 @@ public class AdministrativePanel {
         btnCategories.setOnAction(event -> {
             selectButton(btnCategories);
             vBoxPanels.getChildren().clear();
-            //vBoxPanels.getChildren().add(ViewSparePart.getInstance().getViewSparePart());
+            // vBoxPanels.getChildren().add(ViewSparePart.getInstance().getViewSparePart());
         });
 
         JFXButton buttonReport = new JFXButton("REPORTES");
@@ -85,7 +84,7 @@ public class AdministrativePanel {
         buttonReport.setOnAction(event -> {
             selectButton(buttonReport);
             vBoxPanels.getChildren().clear();
-            //vBoxPanels.getChildren().add(ViewReport.getInstance().getViewReport());
+            // vBoxPanels.getChildren().add(ViewReport.getInstance().getViewReport());
         });
 
         JFXButton btnSyncUp = new JFXButton("SINCRONIZAR");
@@ -96,7 +95,7 @@ public class AdministrativePanel {
         btnSyncUp.setOnAction(event -> {
             selectButton(btnSyncUp);
             vBoxPanels.getChildren().clear();
-            //vBoxPanels.getChildren().add(ViewCustomer.getInstance().getViewCustomerDetail());
+            // vBoxPanels.getChildren().add(ViewCustomer.getInstance().getViewCustomerDetail());
         });
 
         JFXButton btnSettings = new JFXButton("CONFIGURACIONES");
@@ -107,7 +106,7 @@ public class AdministrativePanel {
         btnSettings.setOnAction(event -> {
             selectButton(btnSettings);
             vBoxPanels.getChildren().clear();
-            //vBoxPanels.getChildren().add(ViewQueue.getInstance().getView());
+            // vBoxPanels.getChildren().add(ViewQueue.getInstance().getView());
         });
 
         JFXButton btnLogOut = new JFXButton("INICIAR SESIÓN");
@@ -117,8 +116,8 @@ public class AdministrativePanel {
         btnLogOut.setButtonType(JFXButton.ButtonType.FLAT);
         btnLogOut.setOnAction(event -> Login.getInstance().showWindow());
 
-        vBoxButtons.getChildren().addAll(buttonHeader, btnUsers, btnBooks, btnCategories,
-                buttonReport, btnSyncUp, btnSettings, btnLogOut);
+        vBoxButtons.getChildren().addAll(buttonHeader, btnUsers, btnBooks, btnCategories, buttonReport, btnSyncUp,
+                btnSettings, btnLogOut);
         hBox.getChildren().addAll(vBoxButtons, vBoxPanels);
 
         return hBox;

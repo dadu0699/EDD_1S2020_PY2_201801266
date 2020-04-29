@@ -3,10 +3,13 @@ package org.didierdominguez.controllers;
 import org.didierdominguez.beans.User;
 import org.didierdominguez.util.HashGenerator;
 
+import java.util.ArrayList;
+
 public class UserController {
     private static UserController instance;
     private User[] table;
     private int size;
+    private boolean update;
 
     private UserController() {
         table = new User[nextPrime(45)];
@@ -74,6 +77,51 @@ public class UserController {
         table[pos] = start;
     }
 
+    public void update(int id, String name, String lastName, String career, String password) {
+        User user = search(id);
+        update = false;
+        if (user != null) {
+            user.setName(name);
+            user.setLastName(lastName);
+            user.setCareer(career);
+            user.setPassword(new HashGenerator().encode(password));
+            update = true;
+        }
+    }
+
+    public boolean update() {
+        return  update;
+    }
+
+    public User search(int id) {
+        int pos = hashFunction(id);
+        User user = table[pos];
+        while (user != null && user.getID() != id) {
+            user = user.getNextUser();
+        }
+
+        if (user != null) {
+            return user;
+        }
+
+        return null;
+    }
+
+    public User search(int id, String password) {
+        int pos = hashFunction(id);
+        User user = table[pos];
+        while (user != null && user.getID() != id) {
+            user = user.getNextUser();
+        }
+
+        if (user != null) {
+            if (user.getPassword().equals(new HashGenerator().encode(password))) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     private int hashFunction(Integer x) {
         int hashVal = x.hashCode();
         hashVal %= table.length;
@@ -108,19 +156,28 @@ public class UserController {
         return true;
     }
 
-    public void printHashTable ()
-    {
+    public void printHashTable() {
         System.out.println();
-        for (int i = 0; i < table.length; i++)
-        {
-            System.out.print ("Bucket " + i + ":  ");
+        for (int i = 0; i < table.length; i++) {
+            System.out.print("Bucket " + i + ":  ");
             User user = table[i];
-            while(user != null)
-            {
-                System.out.print(user.getID() +" ");
+            while (user != null) {
+                System.out.print(user.getID() + " ");
                 user = user.getNextUser();
             }
             System.out.println();
         }
+    }
+
+    public ArrayList<User> getHashTable() {
+        ArrayList<User> arrayList = new ArrayList<>();
+        for (int i = 0; i < table.length; i++) {
+            User user = table[i];
+            while (user != null) {
+                arrayList.add(user);
+                user = user.getNextUser();
+            }
+        }
+        return arrayList;
     }
 }

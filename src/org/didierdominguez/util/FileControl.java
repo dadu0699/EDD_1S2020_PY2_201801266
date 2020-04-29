@@ -13,11 +13,9 @@ public class FileControl {
     private String directory;
     private FileChooser fileChooser;
     private File fileControl;
-    private File fileControlImage;
 
     private FileControl() {
         directory = System.getProperty("user.dir");
-        fileControlImage = null;
     }
 
     public static FileControl getInstance() {

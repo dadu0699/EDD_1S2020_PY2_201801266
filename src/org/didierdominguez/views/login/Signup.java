@@ -11,9 +11,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.didierdominguez.Main;
+import org.didierdominguez.beans.SessionProperties;
+import org.didierdominguez.beans.User;
+import org.didierdominguez.controllers.UserController;
 import org.didierdominguez.util.Alert;
 import org.didierdominguez.util.ScreenSize;
 import org.didierdominguez.util.Verifications;
+import org.didierdominguez.views.panel.AdministrativePanel;
 
 public class Signup {
     private static Signup instance;
@@ -60,11 +64,11 @@ public class Signup {
         fieldLastName.setPrefSize(x, y);
         gridPane.add(fieldLastName, 0, 3);
 
-        JFXPasswordField fielCareer = new JFXPasswordField();
-        fielCareer.setPromptText("CARRERA");
-        fielCareer.setId("fieldCareer");
-        fielCareer.setPrefSize(x, y);
-        gridPane.add(fielCareer, 0, 4);
+        JFXTextField fieldCareer = new JFXTextField();
+        fieldCareer.setPromptText("CARRERA");
+        fieldCareer.setId("fieldCareer");
+        fieldCareer.setPrefSize(x, y);
+        gridPane.add(fieldCareer, 0, 4);
 
         JFXPasswordField fieldPassword = new JFXPasswordField();
         fieldPassword.setPromptText("CONTRASEÑA");
@@ -79,25 +83,22 @@ public class Signup {
         buttonSignUp.setOnAction(event -> {
             if (fieldID.getText().length() == 0
                     || !Verifications.getInstance().isNumericInteger(fieldID.getText().trim())
-                    || fieldName.getText().length() == 0
-                    || fieldLastName.getText().length() == 0
-                    || fielCareer.getText().length() == 0
-                    || fieldPassword.getText().length() == 0) {
+                    || fieldName.getText().length() == 0 || fieldLastName.getText().length() == 0
+                    || fieldCareer.getText().length() == 0 || fieldPassword.getText().length() == 0) {
                 Alert.getInstance().showAlert(gridPane, "ERROR", "UNO O MÁS DATOS SON INCORRECTOS");
             } else {
-                /*Customer customer = ControllerCustomer.getInstance().searchCustomer(Integer.parseInt(fieldID.getText().trim()));
-                User user = ControllerUser.getInstance().searchUser(fieldLastName.getText());
+                User user = UserController.getInstance().search(Integer.parseInt(fieldID.getText().trim()));
                 if (user != null) {
                     Alert.getInstance().showAlert(gridPane, "ERROR", "EL USUARIO YA ESTÁ EN USO");
-                } else if (customer != null) {
-                    Alert.getInstance().showAlert(gridPane, "ERROR", "EL CLIENTE YA ESTÁ REGISTRADO");
                 } else {
-                    ControllerCustomer.getInstance().createCustomer(Integer.parseInt(fieldID.getText().trim()),
-                            fieldName.getText().trim().toUpperCase(), false, fieldLastName.getText().trim().toUpperCase(),
-                            fieldPassword.getText().trim().toUpperCase());
-                    CustomerPanel.getInstance().showWindow(ControllerCustomer.getInstance().searchCustomer(Integer.parseInt(fieldID.getText().trim())));
+                    UserController.getInstance().insert(Integer.parseInt(fieldID.getText().trim()),
+                            fieldName.getText().trim(), fieldLastName.getText().trim(), fieldCareer.getText().trim(),
+                            fieldPassword.getText().trim());
+                    SessionProperties.getInstance()
+                            .setUser(UserController.getInstance().search(Integer.parseInt(fieldID.getText().trim())));
+                    AdministrativePanel.getInstance().showWindow();
                     Alert.getInstance().showNotification("REGISTRO", "REGISTRO REALIZADO EXITOSAMENTE");
-                }*/
+                }
             }
         });
         GridPane.setMargin(buttonSignUp, new Insets(5, 0, 0, 0));

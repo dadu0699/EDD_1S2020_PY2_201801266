@@ -11,7 +11,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.didierdominguez.Main;
+import org.didierdominguez.beans.SessionProperties;
+import org.didierdominguez.beans.User;
+import org.didierdominguez.controllers.UserController;
+import org.didierdominguez.util.Alert;
 import org.didierdominguez.util.ScreenSize;
+import org.didierdominguez.util.Verifications;
+import org.didierdominguez.views.panel.AdministrativePanel;
 
 public class Login {
     private static Login instance;
@@ -44,7 +50,7 @@ public class Login {
         gridPane.add(textTitle, 0, 0);
 
         JFXTextField fieldUser = new JFXTextField();
-        fieldUser.setPromptText("USUARIO");
+        fieldUser.setPromptText("CARNET");
         fieldUser.setId("fieldUser");
         fieldUser.setPrefSize(x, y);
         gridPane.add(fieldUser, 0, 1);
@@ -60,18 +66,21 @@ public class Login {
         buttonSignIn.setButtonType(JFXButton.ButtonType.FLAT);
         buttonSignIn.setPrefSize(x, y);
         buttonSignIn.setOnAction(event -> {
-            /*User user = ControllerUser.getInstance().searchUser(fieldUser.getText().trim().toUpperCase(),
-                    fieldPassword.getText());
-            if (user != null) {
-                if (user.getRole()) {
+            if (fieldUser.getText().length() == 0
+                    || !Verifications.getInstance().isNumericInteger(fieldUser.getText().trim())
+                    || fieldPassword.getText().length() == 0) {
+                Alert.getInstance().showAlert(gridPane, "ERROR", "UNO O MÁS DATOS SON INCORRECTOS");
+            } else {
+                User user = UserController.getInstance().search(Integer.parseInt(fieldUser.getText().trim()),
+                        fieldPassword.getText());
+                if (user != null) {
+                    SessionProperties.getInstance().setUser(user);
                     AdministrativePanel.getInstance().showWindow();
                 } else {
-                    Customer customer = ControllerCustomer.getInstance().searchCustomer(user);
-                    if (customer != null) {
-                        CustomerPanel.getInstance().showWindow(customer);
-                    }
+                    Alert.getInstance().showAlert(gridPane, "ERROR", "EL CARNET Y LA CONTRASEÑA QUE "
+                            + "INGRESASTE NO COINCIDEN CON NUESTROS REGISTROS. POR FAVOR, REVISA E INTÉNTALO DE NUEVO.");
                 }
-            }*/
+            }
         });
         GridPane.setMargin(buttonSignIn, new Insets(5, 0, 0, 0));
         gridPane.add(buttonSignIn, 0, 3);
