@@ -1,8 +1,7 @@
 package org.didierdominguez.beans;
 
-
 public class Book {
-    private int isbn;
+    private Integer isbn;
     private String title;
     private String author;
     private String editorial;
@@ -12,7 +11,7 @@ public class Book {
     private String language;
     private User user;
 
-    public Book(int isbn, String title, String author, String editorial, int year, int edition,
+    public Book(Integer isbn, String title, String author, String editorial, int year, int edition,
                 Category category, String language, User user) {
         this.isbn = isbn;
         this.title = title;
@@ -25,11 +24,11 @@ public class Book {
         this.user = user;
     }
 
-    public int getISBN() {
+    public Integer getISBN() {
         return isbn;
     }
 
-    public void setISBN(int isbn) {
+    public void setISBN(Integer isbn) {
         this.isbn = isbn;
     }
 
