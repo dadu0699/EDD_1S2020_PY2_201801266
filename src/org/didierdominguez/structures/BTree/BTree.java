@@ -457,10 +457,6 @@ public class BTree {
     }
 
     public ArrayList<Book> getBooks() {
-        for (Book book:BTreePrint.getBooks(this.root)) {
-            System.out.println(book.getISBN());
-        }
-
         return BTreePrint.getBooks(this.root);
     }
 }

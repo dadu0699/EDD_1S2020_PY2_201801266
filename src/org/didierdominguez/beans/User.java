@@ -64,4 +64,9 @@ public class User {
     public void setNextUser(User nextUser) {
         this.nextUser = nextUser;
     }
+
+    @Override
+    public String toString() {
+        return name + " " + lastName;
+    }
 }

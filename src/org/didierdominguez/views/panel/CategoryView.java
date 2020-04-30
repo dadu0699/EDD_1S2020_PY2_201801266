@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import org.didierdominguez.beans.Book;
 import org.didierdominguez.beans.Category;
 import org.didierdominguez.beans.SessionProperties;
+import org.didierdominguez.beans.User;
 import org.didierdominguez.controllers.CategoryController;
 import org.didierdominguez.util.Alert;
 import org.didierdominguez.util.FileControl;
@@ -270,16 +271,16 @@ public class CategoryView extends Stage {
 
         TableColumn<Book, Integer> columnISBN = new TableColumn<>("ISBN");
         columnISBN.setPrefWidth(x / 10);
-        columnISBN.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+        columnISBN.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
         TableColumn<Book, String> columnTitle = new TableColumn<>("TITULO");
         columnTitle.setPrefWidth(x / 10);
         columnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         TableColumn<Book, String> columnAuthor = new TableColumn<>("AUTOR");
         columnAuthor.setPrefWidth(x / 10);
         columnAuthor.setCellValueFactory(new PropertyValueFactory<>("author"));
-        TableColumn<Book, String> columnUser = new TableColumn<>("USUARIO");
+        TableColumn<Book, User> columnUser = new TableColumn<>("USUARIO");
         columnUser.setPrefWidth(x / 10);
-        columnUser.setCellValueFactory(new PropertyValueFactory<>("user.name"));
+        columnUser.setCellValueFactory(new PropertyValueFactory<>("user"));
 
         tableViewBook = new TableView<>(observableListBook);
         tableViewBook.getColumns().addAll(columnISBN, columnTitle, columnAuthor, columnUser);
