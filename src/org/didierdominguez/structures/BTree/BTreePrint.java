@@ -2,6 +2,8 @@ package org.didierdominguez.structures.BTree;
 
 import org.didierdominguez.beans.Book;
 
+import java.util.ArrayList;
+
 public class BTreePrint {
     public static String getString(BTree tree) {
         if (tree.root == null) {
@@ -35,5 +37,32 @@ public class BTreePrint {
         }
 
         return builder.toString();
+    }
+
+    public static ArrayList<Book> getBooks(BTreeNode node) {
+        ArrayList<Book> arrayList = new ArrayList<>();
+
+        if (node != null) {
+            for (int i = 0; i < node.numberOfKeys(); i++) {
+                Book value = node.getKey(i);
+                arrayList.add(value);
+            }
+
+            if (node.children != null) {
+                for (int i = 0; i < node.numberOfChildren() - 1; i++) {
+                    BTreeNode obj = node.getChild(i);
+                    for (Book book:getBooks(obj)) {
+                        arrayList.add(book);
+                    }
+                }
+                if (node.numberOfChildren() >= 1) {
+                    BTreeNode obj = node.getChild(node.numberOfChildren() - 1);
+                    for (Book book:getBooks(obj)) {
+                        arrayList.add(book);
+                    }
+                }
+            }
+        }
+        return arrayList;
     }
 }

@@ -152,13 +152,13 @@ public class UserView extends Stage {
         TableColumn<User, User> columnUser = new TableColumn<>("APELLIDO");
         columnUser.setPrefWidth((3 * x / 4) / 4);
         columnUser.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        TableColumn<User, String> columnRole = new TableColumn<>("CARRERA");
-        columnRole.setPrefWidth((3 * x / 4) / 4);
-        columnRole.setCellValueFactory(new PropertyValueFactory<>("career"));
+        TableColumn<User, String> columnCareer = new TableColumn<>("CARRERA");
+        columnCareer.setPrefWidth((3 * x / 4) / 4);
+        columnCareer.setCellValueFactory(new PropertyValueFactory<>("career"));
 
         updateObservableList();
         tableView = new TableView<>(observableList);
-        tableView.getColumns().addAll(columnID, columnName, columnUser, columnRole);
+        tableView.getColumns().addAll(columnID, columnName, columnUser, columnCareer);
         tableView.setPrefSize(x, 7 * y / 8);
         tableView.setOnMouseClicked(event -> {
             hBox.getChildren().clear();

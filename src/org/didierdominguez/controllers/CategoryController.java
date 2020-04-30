@@ -1,6 +1,10 @@
 package org.didierdominguez.controllers;
 
+import org.didierdominguez.beans.Book;
 import org.didierdominguez.beans.Category;
+import org.didierdominguez.beans.User;
+
+import java.util.ArrayList;
 
 public class CategoryController {
     private static CategoryController instance;
@@ -70,19 +74,19 @@ public class CategoryController {
     }
 
 
-    public void insert(String name) {
-        root = insertNode(root, name);
+    public void insert(String name, User user) {
+        root = insertNode(root, name, user);
     }
 
-    private Category insertNode(Category node, String name) {
+    private Category insertNode(Category node, String name, User user) {
         if (node == null) {
-            return (new Category(name));
+            return (new Category(name, user));
         }
 
         if (String.CASE_INSENSITIVE_ORDER.compare(name, node.getName()) < 0) {
-            node.setLeftNode(insertNode(node.getLeftNode(), name));
+            node.setLeftNode(insertNode(node.getLeftNode(), name, user));
         } else if (String.CASE_INSENSITIVE_ORDER.compare(name, node.getName()) > 0) {
-            node.setRightNode(insertNode(node.getRightNode(), name));
+            node.setRightNode(insertNode(node.getRightNode(), name, user));
         } else {
             return node;
         }
@@ -166,5 +170,93 @@ public class CategoryController {
             return leftRotate(root);
         }
         return root;
+    }
+
+    public ArrayList<Category> getCategories() {
+        ArrayList<Category> categories = new ArrayList<>();
+        inOrderCategories(root, categories);
+        return categories;
+    }
+
+    private void inOrderCategories(Category root, ArrayList<Category> categories) {
+        if (root != null) {
+            inOrderCategories(root.getLeftNode(), categories);
+            categories.add(root);
+            inOrderCategories(root.getRightNode(), categories);
+        }
+    }
+
+    public ArrayList<Book> getBooks() {
+        ArrayList<Book> books = new ArrayList<>();
+        inOrderBooks(root, books);
+        return books;
+    }
+
+    private void inOrderBooks(Category root, ArrayList<Book> books) {
+        if (root != null) {
+            inOrderBooks(root.getLeftNode(), books);
+            for (Book book : root.getBooks().getBooks()) {
+                books.add(book);
+            }
+            inOrderBooks(root.getRightNode(), books);
+        }
+    }
+
+    public ArrayList<Book> searchBooksCategory(Category category) {
+        return searchBooksCategory(root, category);
+    }
+
+    private ArrayList<Book> searchBooksCategory(Category root, Category category) {
+        if (root == null) {
+            return null;
+        } else if (root == category) {
+            if (root.getBooks() != null) {
+                return root.getBooks().getBooks();
+            }
+            return null;
+        } else if ((String.CASE_INSENSITIVE_ORDER.compare(root.getName(), category.getName()) < 0)) {
+            return searchBooksCategory(root.getRightNode(), category);
+        } else {
+            return searchBooksCategory(root.getLeftNode(), category);
+        }
+    }
+
+    public Category searchCategory(Category category) {
+        return searchCategory(root, category);
+    }
+
+    private Category searchCategory(Category root, Category category) {
+        if (root == null) {
+            return null;
+        } else if (root == category) {
+            return root;
+        } else if ((String.CASE_INSENSITIVE_ORDER.compare(root.getName(), category.getName()) < 0)) {
+            return searchCategory(root.getRightNode(), category);
+        } else {
+            return searchCategory(root.getLeftNode(), category);
+        }
+    }
+
+    public Category searchCategoryByName(String name) {
+        return searchCategoryByName(root, name);
+    }
+
+    private Category searchCategoryByName(Category root, String name) {
+        if (root == null) {
+            return null;
+        } else if (root.getName() == name) {
+            return root;
+        } else if ((String.CASE_INSENSITIVE_ORDER.compare(root.getName(), name) < 0)) {
+            return searchCategoryByName(root.getRightNode(), name);
+        } else {
+            return searchCategoryByName(root.getLeftNode(), name);
+        }
+    }
+
+    public void deleteBook(Category category, Book book) {
+        Category c = searchCategory(category);
+        if (c != null) {
+            c.getBooks().remove(book.getISBN());
+        }
     }
 }

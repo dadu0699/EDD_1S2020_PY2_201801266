@@ -4,6 +4,8 @@ import org.didierdominguez.beans.Book;
 import org.didierdominguez.beans.Category;
 import org.didierdominguez.beans.User;
 
+import java.util.ArrayList;
+
 public class BTree {
     private int minKeySize;
     private int minChildrenSize;
@@ -452,5 +454,13 @@ public class BTree {
 
     public String getString() {
         return BTreePrint.getString(this);
+    }
+
+    public ArrayList<Book> getBooks() {
+        for (Book book:BTreePrint.getBooks(this.root)) {
+            System.out.println(book.getISBN());
+        }
+
+        return BTreePrint.getBooks(this.root);
     }
 }

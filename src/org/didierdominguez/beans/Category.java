@@ -1,14 +1,20 @@
 package org.didierdominguez.beans;
 
+import org.didierdominguez.structures.BTree.BTree;
+
 public class Category {
     private String name;
+    private BTree books;
+    private User user;
     private int height;
     private Category leftNode;
     private Category rightNode;
 
-    public Category(String name) {
+    public Category(String name, User user) {
         this.name = name;
-        this.height = 1;
+        this.user = user;
+        books = new BTree(5);
+        height = 1;
         leftNode = null;
         rightNode = null;
     }
@@ -19,6 +25,18 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BTree getBooks() {
+        return books;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getHeight() {

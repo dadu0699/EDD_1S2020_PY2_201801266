@@ -73,7 +73,7 @@ public class AdministrativePanel {
         btnCategories.setOnAction(event -> {
             selectButton(btnCategories);
             vBoxPanels.getChildren().clear();
-            // vBoxPanels.getChildren().add(ViewSparePart.getInstance().getViewSparePart());
+            vBoxPanels.getChildren().add(CategoryView.getInstance().getViewCategoryDetail());
         });
 
         JFXButton buttonReport = new JFXButton("REPORTES");
