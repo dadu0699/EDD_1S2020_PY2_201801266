@@ -51,7 +51,9 @@ public class FileControl {
         String command;
         try {
             if (fileControl != null) {
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(fileControl));
+                // BufferedReader bufferedReader = new BufferedReader(new FileReader(fileControl));
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(fileControl), "UTF-8"));
                 while ((command = bufferedReader.readLine()) != null) {
                     System.out.println(command);
                     arrayList.add(command);
@@ -68,7 +70,7 @@ public class FileControl {
         JSONParser parser = new JSONParser();
         try {
             if (fileControl != null) {
-                Object obj = parser.parse(new FileReader(fileControl));
+                Object obj = parser.parse(new InputStreamReader(new FileInputStream(fileControl), "UTF-8"));
                 JSONObject jsonObject = (JSONObject) obj;
 
                 JSONArray tags = (JSONArray) jsonObject.get("Usuarios");
@@ -101,7 +103,7 @@ public class FileControl {
         JSONParser parser = new JSONParser();
         try {
             if (fileControl != null) {
-                Object obj = parser.parse(new FileReader(fileControl));
+                Object obj = parser.parse(new InputStreamReader(new FileInputStream(fileControl), "UTF-8"));
                 JSONObject jsonObject = (JSONObject) obj;
 
                 JSONArray tags = (JSONArray) jsonObject.get("Libros");
