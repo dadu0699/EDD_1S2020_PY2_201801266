@@ -155,10 +155,13 @@ public class UserView extends Stage {
         TableColumn<User, String> columnCareer = new TableColumn<>("CARRERA");
         columnCareer.setPrefWidth((3 * x / 4) / 4);
         columnCareer.setCellValueFactory(new PropertyValueFactory<>("career"));
+        TableColumn<User, String> columnPassword = new TableColumn<>("CONTRASEÑA");
+        columnPassword.setPrefWidth((3 * x / 4) / 4);
+        columnPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
 
         updateObservableList();
         tableView = new TableView<>(observableList);
-        tableView.getColumns().addAll(columnID, columnName, columnUser, columnCareer);
+        tableView.getColumns().addAll(columnID, columnName, columnUser, columnCareer, columnPassword);
         tableView.setPrefSize(x, 7 * y / 8);
         tableView.setOnMouseClicked(event -> {
             hBox.getChildren().clear();
@@ -248,13 +251,13 @@ class CreateUser {
             } else {
                 User user = UserController.getInstance().search(Integer.parseInt(fieldID.getText().trim()));
                 if (user != null) {
-                    Alert.getInstance().showAlert(gridPane, "ERROR", "EL USUARIO YA ESTÁ EN USO");
+                    Alert.getInstance().showAlert(gridPane, "ERROR", "EL USUARIO YA ESTÁ REGISTRADO");
                 } else {
                     UserController.getInstance().insert(Integer.parseInt(fieldID.getText().trim()),
                             fieldName.getText().trim(), fieldLastName.getText().trim(), fieldCareer.getText().trim(),
                             fieldPassword.getText().trim());
                     UserView.getInstance().updateTableViewItems();
-                    Alert.getInstance().showNotification("REGISTRO", "REGISTRO REALIZADO EXITOSAMENTE");
+                    Alert.getInstance().showNotification("USUARIO", "REGISTRO REALIZADO EXITOSAMENTE");
                 }
             }
         });

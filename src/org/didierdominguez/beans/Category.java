@@ -62,4 +62,8 @@ public class Category {
     public void setRightNode(Category rightNode) {
         this.rightNode = rightNode;
     }
+
+    public String toString(){
+        return name;
+    }
 }

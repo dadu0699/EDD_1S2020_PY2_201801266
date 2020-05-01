@@ -146,28 +146,11 @@ public class CategoryView extends Stage {
         buttonFile.setButtonType(JFXButton.ButtonType.FLAT);
         buttonFile.setPrefSize(x, y);
         buttonFile.setOnAction(event -> {
-            /*FileControl.getInstance().uploadFile("CustomerFile", "*.tmca");
-            ArrayList<String> arrayList = FileControl.getInstance().readFile();
-            if (arrayList != null) {
-                for (String command: arrayList) {
-                    String[] params = command.split("-");
-                    if (ControllerCustomer.getInstance().searchCustomer(Integer.parseInt(params[0])) == null) {
-                        boolean role = params[4].equalsIgnoreCase("ORO");
-                        ControllerCustomer.getInstance().createCustomer(Integer.parseInt(params[0]),
-                                params[1], role, params[2], params[3]);
-                        String[] cars = params[5].split(";");
-                        Customer customer = ControllerCustomer.getInstance().searchCustomer(Integer.parseInt(params[0]));
-                        if (customer != null) {
-                            for (String car: cars) {
-                                String[] carDetail = car.split(",");
-                                ControllerCar.getInstance().createCar(carDetail[0], carDetail[1], carDetail[2], carDetail[3], customer);
-                            }
-                        }
-                    }
-                }
-                updateTableViewItemsCustomer();
-                Alert.getInstance().showNotification("CLIENTES", "ARCHIVO LEIDO EXITOSAMENTE");
-            }*/
+            if (SessionProperties.getInstance().isAuthenticated()) {
+                FileControl.getInstance().uploadFile("Book File", "*.json");
+                FileControl.getInstance().readBookJSON();
+                restartHBox();
+            }
         });
 
         JFXButton buttonAdd = new JFXButton("AGREGAR");
@@ -288,8 +271,8 @@ public class CategoryView extends Stage {
         tableViewBook.setOnMouseClicked(event -> {
             if (tableViewBook.getSelectionModel().getSelectedItem() != null) {
                 vBoxApplications.getChildren().remove(0);
-                //vBoxApplications.getChildren().add(0, ShowBook.getInstance().getGridPane(
-                //  (Book) tableViewBook.getSelectionModel().getSelectedItem()));
+                vBoxApplications.getChildren().add(0, ShowBook.getInstance().getGridPane(
+                        (Book) tableViewBook.getSelectionModel().getSelectedItem()));
             }
         });
         gridPane.add(tableViewBook, 0, 2);

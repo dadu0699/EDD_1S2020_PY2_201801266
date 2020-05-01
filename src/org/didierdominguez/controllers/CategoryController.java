@@ -202,6 +202,24 @@ public class CategoryController {
         }
     }
 
+    public ArrayList<Book> searchBooks(String search){
+        ArrayList<Book> result = new ArrayList<>();
+        for(Book book : getBooks()){
+            if(String.valueOf(book.getISBN()).contains(search)){
+                result.add(book);
+            } else if(book.getAuthor().contains(search)){
+                result.add(book);
+            } else if(book.getEditorial().contains(search)){
+                result.add(book);
+            } else if(book.getUser().toString().contains(search)){
+                result.add(book);
+            } else if(book.getTitle().contains(search)){
+                result.add(book);
+            }
+        }
+        return result;
+    }
+
     public ArrayList<Book> searchBooksCategory(Category category) {
         return searchBooksCategory(root, category);
     }
@@ -244,7 +262,7 @@ public class CategoryController {
     private Category searchCategoryByName(Category root, String name) {
         if (root == null) {
             return null;
-        } else if (root.getName() == name) {
+        } else if (root.getName().equals(name)) {
             return root;
         } else if ((String.CASE_INSENSITIVE_ORDER.compare(root.getName(), name) < 0)) {
             return searchCategoryByName(root.getRightNode(), name);

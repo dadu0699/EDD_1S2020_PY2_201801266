@@ -1,7 +1,14 @@
 package org.didierdominguez.util;
 
 import javafx.stage.FileChooser;
+import org.didierdominguez.beans.Book;
+import org.didierdominguez.beans.Category;
+import org.didierdominguez.beans.SessionProperties;
+import org.didierdominguez.beans.User;
+import org.didierdominguez.controllers.CategoryController;
 import org.didierdominguez.controllers.UserController;
+import org.didierdominguez.views.panel.CategoryView;
+import org.didierdominguez.views.panel.UserView;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -72,10 +79,67 @@ public class FileControl {
                     long id = (long) innerObject.get("Carnet");
                     String name = (String) innerObject.get("Nombre");
                     String lastName = (String) innerObject.get("Apellido");
-                    String career = (String) innerObject.get("Apellido");
-                    String password = (String) innerObject.get("Apellido");
-                    UserController.getInstance().insert(Integer.parseInt(String.valueOf(id)), name, lastName,
-                            career, password);
+                    String career = (String) innerObject.get("Carrera");
+                    String password = (String) innerObject.get("Password");
+                    User user = UserController.getInstance().search(Integer.parseInt(String.valueOf(id)));
+                    if (user != null) {
+                        Alert.getInstance().showNotification("ERROR", "EL USUARIO YA ESTÁ REGISTRADO");
+                    } else {
+                        UserController.getInstance().insert(Integer.parseInt(String.valueOf(id)), name, lastName,
+                                career, password);
+                        Alert.getInstance().showNotification("USUARIO", "REGISTRO REALIZADO EXITOSAMENTE");
+                    }
+                }
+                // System.out.println(tags.toJSONString());
+            }
+        } catch (ParseException | IOException exception) {
+            System.out.println(exception);
+        }
+    }
+
+    public void readBookJSON() {
+        JSONParser parser = new JSONParser();
+        try {
+            if (fileControl != null) {
+                Object obj = parser.parse(new FileReader(fileControl));
+                JSONObject jsonObject = (JSONObject) obj;
+
+                JSONArray tags = (JSONArray) jsonObject.get("Libros");
+                for (int i = 0; i < tags.size(); i++) {
+                    // System.out.println(tags.get(i));
+                    JSONObject innerObject = (JSONObject) tags.get(i);
+
+                    long isbn = (long) innerObject.get("ISBN");
+                    long year = (long) innerObject.get("Año");
+                    String language = (String) innerObject.get("Idioma");
+                    String title = (String) innerObject.get("Titulo");
+                    String editorial = (String) innerObject.get("Editorial");
+                    String author = (String) innerObject.get("Autor");
+                    long edition = (long) innerObject.get("Edicion");
+                    String category = (String) innerObject.get("Categoria");
+
+                    Category categoryS = CategoryController.getInstance().searchCategoryByName(category);
+                    if (categoryS == null) {
+                        CategoryController.getInstance().insert(category, SessionProperties.getInstance().getUser());
+                        categoryS = CategoryController.getInstance().searchCategoryByName(category);
+                        Alert.getInstance().showNotification("CATEGORIA", "CATEGORIA AGREGADA EXITOSAMENTE");
+                    }
+
+                    Book book = null;
+                    for (Book books : CategoryController.getInstance().getBooks()) {
+                        if (books.getISBN() == Integer.parseInt(String.valueOf(isbn))) {
+                            book = books;
+                        }
+                    }
+
+                    if (book != null) {
+                        Alert.getInstance().showNotification("ERROR", "EL LIBRO YA ESTÁ REGISTRADO");
+                    } else {
+                        categoryS.getBooks().add(Integer.parseInt(String.valueOf(isbn)), title, author, editorial,
+                                Integer.parseInt(String.valueOf(year)), Integer.parseInt(String.valueOf(edition)),
+                                categoryS, language, SessionProperties.getInstance().getUser());
+                        Alert.getInstance().showNotification("LIBRO", "LIBRO AGREGADO EXITOSAMENTE");
+                    }
                 }
                 // System.out.println(tags.toJSONString());
             }

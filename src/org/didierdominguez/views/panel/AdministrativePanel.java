@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.didierdominguez.Main;
+import org.didierdominguez.beans.SessionProperties;
 import org.didierdominguez.util.ScreenSize;
 import org.didierdominguez.views.login.Login;
 
@@ -62,7 +63,7 @@ public class AdministrativePanel {
         btnBooks.setOnAction(event -> {
             selectButton(btnBooks);
             vBoxPanels.getChildren().clear();
-            // vBoxPanels.getChildren().add(ViewEmployee.getInstance().getViewEmployee());
+            vBoxPanels.getChildren().add(BookView.getInstance().getViewBook());
         });
 
         JFXButton btnCategories = new JFXButton("CATEGORIAS");
@@ -109,7 +110,8 @@ public class AdministrativePanel {
             // vBoxPanels.getChildren().add(ViewQueue.getInstance().getView());
         });
 
-        JFXButton btnLogOut = new JFXButton("INICIAR SESIÓN");
+        String message = !SessionProperties.getInstance().isAuthenticated() ? "INICIAR SESIÓN" : "CERRAR SESIÓN";
+        JFXButton btnLogOut = new JFXButton(message);
         btnLogOut.setId("btnLogOut");
         btnLogOut.getStyleClass().addAll("panelButton", "primaryButton");
         btnLogOut.setPrefSize(x, y / 8);
