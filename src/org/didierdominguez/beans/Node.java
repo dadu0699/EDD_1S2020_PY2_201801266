@@ -1,20 +1,12 @@
 package org.didierdominguez.beans;
 
 public class Node {
-    private String name;
     private String ip;
+    private Node nextNode;
 
-    public Node(String name, String ip) {
-        this.name = name;
+    public Node(String ip) {
         this.ip = ip;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        nextNode = null;
     }
 
     public String getIp() {
@@ -23,5 +15,13 @@ public class Node {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public Node getNextNode() {
+        return nextNode;
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
     }
 }

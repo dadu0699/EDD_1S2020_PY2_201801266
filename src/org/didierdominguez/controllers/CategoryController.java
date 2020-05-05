@@ -9,9 +9,11 @@ import java.util.ArrayList;
 public class CategoryController {
     private static CategoryController instance;
     private Category root;
+    private int indexNode;
 
     private CategoryController() {
         root = null;
+        indexNode = 0;
     }
 
     public static CategoryController getInstance() {
@@ -202,18 +204,18 @@ public class CategoryController {
         }
     }
 
-    public ArrayList<Book> searchBooks(String search){
+    public ArrayList<Book> searchBooks(String search) {
         ArrayList<Book> result = new ArrayList<>();
-        for(Book book : getBooks()){
-            if(String.valueOf(book.getISBN()).contains(search)){
+        for (Book book : getBooks()) {
+            if (String.valueOf(book.getISBN()).contains(search)) {
                 result.add(book);
-            } else if(book.getAuthor().contains(search)){
+            } else if (book.getAuthor().contains(search)) {
                 result.add(book);
-            } else if(book.getEditorial().contains(search)){
+            } else if (book.getEditorial().contains(search)) {
                 result.add(book);
-            } else if(book.getUser().toString().contains(search)){
+            } else if (book.getUser().toString().contains(search)) {
                 result.add(book);
-            } else if(book.getTitle().contains(search)){
+            } else if (book.getTitle().contains(search)) {
                 result.add(book);
             }
         }
@@ -276,5 +278,133 @@ public class CategoryController {
         if (c != null) {
             c.getBooks().remove(book.getISBN());
         }
+    }
+
+    private String graphTreeAVL(Category category) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        int indexParentNode = indexNode;
+        stringBuilder.append("\n\tN" + indexNode + "[label = \"" + category.getName() + "\"]; ");
+
+        if (category.getLeftNode() != null) {
+            indexNode++;
+            int indexLeftNode = indexNode;
+            stringBuilder.append(graphTreeAVL(category.getLeftNode()));
+            stringBuilder.append("\n\tN" + indexParentNode + " -> N" + indexLeftNode + "; ");
+        }
+
+        if (category.getRightNode() != null) {
+            indexNode++;
+            int indexRightNode = indexNode;
+            stringBuilder.append(graphTreeAVL(category.getRightNode()));
+            stringBuilder.append("\n\tN" + indexParentNode + " -> N" + indexRightNode + "; ");
+        }
+        return stringBuilder.toString();
+    }
+
+    public String graphTreeAVL() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\tnode[style=filled fillcolor=cornsilk2];");
+
+        if (root != null) {
+            indexNode = 0;
+            stringBuilder.append(graphTreeAVL(root));
+        }
+
+        stringBuilder.append("\n}");
+        return stringBuilder.toString();
+    }
+
+
+    private String graphInOrder(Category root) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (root != null) {
+            stringBuilder.append(graphInOrder(root.getLeftNode()));
+            indexNode++;
+            stringBuilder.append("\n\tN" + indexNode + " [label =\"" + root.getName() + "\"];");
+            stringBuilder.append(graphInOrder(root.getRightNode()));
+        }
+        return stringBuilder.toString();
+    }
+
+    private String graphPreOrder(Category root) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (root != null) {
+            indexNode++;
+            stringBuilder.append("\n\tN" + indexNode + " [label =\"" + root.getName() + "\"];");
+            stringBuilder.append(graphPreOrder(root.getLeftNode()));
+            stringBuilder.append(graphPreOrder(root.getRightNode()));
+        }
+        return stringBuilder.toString();
+    }
+
+    private String graphPostOrder(Category root) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (root != null) {
+            stringBuilder.append(graphPostOrder(root.getLeftNode()));
+            stringBuilder.append(graphPostOrder(root.getRightNode()));
+            indexNode++;
+            stringBuilder.append("\n\tN" + indexNode + " [label =\"" + root.getName() + "\"];");
+        }
+        return stringBuilder.toString();
+    }
+
+    public String graphInOrder() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\trankdir = LR;");
+        stringBuilder.append("\n\tnode[shape=record, style=filled fillcolor=cornsilk2];");
+
+        if (root != null) {
+            indexNode = -1;
+            stringBuilder.append(graphInOrder(root));
+
+            for (int i = 0; i < indexNode; i++) {
+                stringBuilder.append("\n\tN" + i + " -> N" + (i + 1) + ";");
+            }
+        }
+
+        stringBuilder.append("\n}");
+        return stringBuilder.toString();
+    }
+
+    public String graphPreOrder() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\trankdir = LR;");
+        stringBuilder.append("\n\tnode[shape=record, style=filled fillcolor=cornsilk2];");
+
+        if (root != null) {
+            indexNode = -1;
+            stringBuilder.append(graphPreOrder(root));
+
+            for (int i = 0; i < indexNode; i++) {
+                stringBuilder.append("\n\tN" + i + " -> N" + (i + 1) + ";");
+            }
+        }
+
+        stringBuilder.append("\n}");
+        return stringBuilder.toString();
+    }
+
+
+    public String graphPostOrder() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\trankdir = LR;");
+        stringBuilder.append("\n\tnode[shape=record, style=filled fillcolor=cornsilk2];");
+
+        if (root != null) {
+            indexNode = -1;
+            stringBuilder.append(graphPostOrder(root));
+
+            for (int i = 0; i < indexNode; i++) {
+                stringBuilder.append("\n\tN" + i + " -> N" + (i + 1) + ";");
+            }
+        }
+
+        stringBuilder.append("\n}");
+        return stringBuilder.toString();
     }
 }

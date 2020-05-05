@@ -70,7 +70,8 @@ public class FileControl {
         JSONParser parser = new JSONParser();
         try {
             if (fileControl != null) {
-                Object obj = parser.parse(new InputStreamReader(new FileInputStream(fileControl), "UTF-8"));
+                Object obj = parser.parse(new InputStreamReader(
+                        new FileInputStream(fileControl), "UTF-8"));
                 JSONObject jsonObject = (JSONObject) obj;
 
                 JSONArray tags = (JSONArray) jsonObject.get("Usuarios");
@@ -103,7 +104,8 @@ public class FileControl {
         JSONParser parser = new JSONParser();
         try {
             if (fileControl != null) {
-                Object obj = parser.parse(new InputStreamReader(new FileInputStream(fileControl), "UTF-8"));
+                Object obj = parser.parse(new InputStreamReader(
+                        new FileInputStream(fileControl), "UTF-8"));
                 JSONObject jsonObject = (JSONObject) obj;
 
                 JSONArray tags = (JSONArray) jsonObject.get("Libros");

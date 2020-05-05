@@ -85,7 +85,7 @@ public class AdministrativePanel {
         buttonReport.setOnAction(event -> {
             selectButton(buttonReport);
             vBoxPanels.getChildren().clear();
-            // vBoxPanels.getChildren().add(ViewReport.getInstance().getViewReport());
+            vBoxPanels.getChildren().add(ReportView.getInstance().getReportView());
         });
 
         JFXButton btnSyncUp = new JFXButton("SINCRONIZAR");
@@ -107,7 +107,7 @@ public class AdministrativePanel {
         btnSettings.setOnAction(event -> {
             selectButton(btnSettings);
             vBoxPanels.getChildren().clear();
-            // vBoxPanels.getChildren().add(ViewQueue.getInstance().getView());
+            SettingsView.getInstance().show(hBox, "CONFIGURACION IP");
         });
 
         String message = !SessionProperties.getInstance().isAuthenticated() ? "INICIAR SESIÓN" : "CERRAR SESIÓN";

@@ -26,7 +26,6 @@ public class Main extends Application {
         stage.centerOnScreen();
         stage.setMaximized(true);
 
-        // root.getChildren().addAll(Login.getInstance().getLogin());
         root.getChildren().addAll(AdministrativePanel.getInstance().getPane());
         stage.centerOnScreen();
         stage.show();

@@ -12,7 +12,7 @@ public class UserController {
     private boolean update;
 
     private UserController() {
-        table = new User[nextPrime(45)];
+        table = new User[45];
         size = 0;
     }
 
@@ -90,7 +90,7 @@ public class UserController {
     }
 
     public boolean update() {
-        return  update;
+        return update;
     }
 
     public User search(int id) {
@@ -179,5 +179,49 @@ public class UserController {
             }
         }
         return arrayList;
+    }
+
+    public String getGraph() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\trankdir = LR;");
+        stringBuilder.append("\n\tnode[shape=record, style=filled fillcolor=cornsilk2];");
+
+        for (int i = 0; i < table.length; i++) {
+            stringBuilder.append("\n\tBucket" + i + "[label =\"Bucket " + i + "\"];");
+            User user = table[i];
+
+            if (user != null) {
+                stringBuilder.append("\n\t" + user.getID() + "[label =\""
+                        + user.getID() + "\\n"
+                        + user.getName() + " "
+                        + user.getLastName() + "\\n"
+                        + user.getCareer() + "\\n"
+                        + user.getPassword() + "\\n"
+                        + "\"];");
+
+                stringBuilder.append("\n\tBucket" + i + " ->"
+                        + user.getID() + ";");
+            }
+
+            while (user != null) {
+                if (user.getNextUser() != null) {
+                    stringBuilder.append("\n\t" + user.getNextUser().getID() + "[label =\""
+                            + user.getNextUser().getID() + "\\n"
+                            + user.getNextUser().getName() + " "
+                            + user.getNextUser().getLastName() + "\\n"
+                            + user.getNextUser().getCareer() + "\\n"
+                            + user.getNextUser().getPassword() + "\\n"
+                            + "\"];");
+
+                    stringBuilder.append("\n\t" + user.getID() + " ->"
+                            + user.getNextUser().getID() + ";");
+                }
+                user = user.getNextUser();
+            }
+        }
+
+        stringBuilder.append("\n}");
+        return stringBuilder.toString();
     }
 }

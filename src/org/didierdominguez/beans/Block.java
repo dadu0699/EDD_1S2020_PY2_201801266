@@ -1,22 +1,30 @@
 package org.didierdominguez.beans;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Block {
     private int index;
-    private Date date;
+    private String date;
     private String data;
-    private int once;
+    private String nonce;
     private String previousHASH;
     private String hash;
+    private Block nextNode;
+    private Block previousNode;
 
-    public Block(int index, Date date, String data, int once, String previousHASH, String hash) {
+    public Block(int index, String data, String nonce, String previousHASH, String hash) {
         this.index = index;
-        this.date = date;
         this.data = data;
-        this.once = once;
+        this.nonce = nonce;
         this.previousHASH = previousHASH;
         this.hash = hash;
+        nextNode = null;
+        previousNode = null;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        this.date = formatter.format(date);
     }
 
     public int getIndex() {
@@ -27,11 +35,11 @@ public class Block {
         this.index = index;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -43,12 +51,12 @@ public class Block {
         this.data = data;
     }
 
-    public int getOnce() {
-        return once;
+    public String getNonce() {
+        return nonce;
     }
 
-    public void setOnce(int once) {
-        this.once = once;
+    public void setNonce(String nonce) {
+        this.nonce = nonce;
     }
 
     public String getPreviousHASH() {
@@ -65,5 +73,21 @@ public class Block {
 
     public void setHash(String hash) {
         this.hash = hash;
+    }
+
+    public Block getNextNode() {
+        return nextNode;
+    }
+
+    public void setNextNode(Block nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public Block getPreviousNode() {
+        return previousNode;
+    }
+
+    public void setPreviousNode(Block previousNode) {
+        this.previousNode = previousNode;
     }
 }
