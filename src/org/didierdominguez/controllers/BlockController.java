@@ -2,6 +2,7 @@ package org.didierdominguez.controllers;
 
 import org.apache.commons.codec.binary.Hex;
 import org.didierdominguez.beans.Block;
+import org.didierdominguez.util.JSONBlock;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -25,44 +26,34 @@ public class BlockController {
         return instance;
     }
 
-    public Block getFirstNode() {
-        return firstNode;
-    }
-
-    public Block getLastNode() {
-        return lastNode;
-    }
-
     private boolean isEmpty() {
         return firstNode == null;
     }
 
-    public void addFirstNode(int index, String data, String previousHASH) {
-        Block node = new Block(index, data, String.valueOf(nonce) , previousHASH, hash);
-        if (!isEmpty()) {
-            node.setNextNode(firstNode);
-            firstNode.setPreviousNode(node);
-        } else {
-            lastNode = node;
-        }
-        firstNode = node;
-    }
-
-    public void addLastNode(int index, String data) {
+    public void addLastNode() {
         nonce = 0;
         hash = "";
-        getHash(data);
+        String data = "";
 
-        Block node = new Block(index, data, String.valueOf(nonce), "", hash);
+        Block node = new Block(data, String.valueOf(nonce), hash);
         if (isEmpty()) {
             firstNode = node;
             node.setPreviousHASH("0000");
+            node.setIndex(0);
         } else {
             node.setPreviousNode(lastNode);
+            node.setIndex(node.getPreviousNode().getIndex() + 1);
             node.setPreviousHASH(lastNode.getHash());
             lastNode.setNextNode(node);
         }
         lastNode = node;
+
+        /*getHash((node.getIndex() + node.getDate() + node.getPreviousNode() + node.getData())
+                .replace(" ", ""));*/
+        node.setHash(hash);
+        node.setNonce(String.valueOf(nonce));
+        JSONBlock.getInstance().generateJSON(node);
+        node.setData(JSONBlock.getInstance().getData());
     }
 
     public void readStartNodes() {
@@ -72,63 +63,6 @@ public class BlockController {
             auxiliaryNode = auxiliaryNode.getNextNode();
         }
         System.out.println();
-    }
-
-    public void readEndNodes() {
-        Block auxiliaryNode = lastNode;
-        while (auxiliaryNode != null) {
-            // System.out.print(auxiliaryNode.getObject() + " <--> ");
-            auxiliaryNode = auxiliaryNode.getPreviousNode();
-        }
-        System.out.println();
-    }
-
-    public void deleteFirstNode() {
-        if (!isEmpty()) {
-            if (firstNode == lastNode) {
-                firstNode = null;
-                lastNode = null;
-            } else {
-                firstNode = firstNode.getNextNode();
-                firstNode.setPreviousNode(null);
-            }
-        }
-    }
-
-    public void deleteLastNode() {
-        if (!isEmpty()) {
-            if (firstNode == lastNode) {
-                firstNode = null;
-                lastNode = null;
-            } else {
-                lastNode = lastNode.getPreviousNode();
-                lastNode.setNextNode(null);
-            }
-        }
-    }
-
-    public void deleteSpecificNode(int index) {
-        if (!isEmpty()) {
-            Block auxiliaryNode = searchNode(index);
-            if (firstNode == auxiliaryNode) {
-                deleteFirstNode();
-            } else if (lastNode == auxiliaryNode) {
-                deleteLastNode();
-            } else {
-                Block previousNode = auxiliaryNode.getPreviousNode();
-                Block nextNode = auxiliaryNode.getNextNode();
-                previousNode.setNextNode(nextNode);
-                nextNode.setPreviousNode(previousNode);
-            }
-        }
-    }
-
-    private Block searchNode(int id) {
-        Block auxiliaryNode = firstNode;
-        while (auxiliaryNode != null && auxiliaryNode.getIndex() != id) {
-            auxiliaryNode = auxiliaryNode.getNextNode();
-        }
-        return auxiliaryNode;
     }
 
     private String getSHA(String input) {
@@ -150,11 +84,6 @@ public class BlockController {
         }
 
         String aux = getSHA(newData);
-        /*
-            System.out.println(newData);
-            System.out.println(nonce);
-            System.out.println(aux);
-         */
 
         hash = aux;
         if (aux.startsWith("000")) {
@@ -164,5 +93,39 @@ public class BlockController {
             nonce++;
             getHash(data);
         }
+    }
+
+    public String getGraph() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\tgraph [bgcolor=transparent];");
+        stringBuilder.append("\n\trankdir = LR;");
+        stringBuilder.append("\n\tnode[shape=record, style=filled color=\"#393C4BFF\" fillcolor=\"#393C4BFF\", " +
+                "fontcolor = \"#F8F8F2FF\"];");
+        if (!isEmpty()) {
+            Block auxiliaryNode = firstNode;
+            int index = 0;
+
+            while (auxiliaryNode != null) {
+                stringBuilder.append("\n\t" +"N" + index + " [label =\""
+                        + "INDEX: " + auxiliaryNode.getIndex() + "\\n"
+                        + "TIMPESTAMP: " + auxiliaryNode.getDate().replace("\\","") + "\\n"
+                        + "NONCE: " + auxiliaryNode.getNonce() + "\\n"
+                        // + auxiliaryNode.getData().replace("\"", "\'") + "\\n"
+                        + "PREVIOUSHASH: " +auxiliaryNode.getPreviousHASH() + "\\n"
+                        + "HASH: " +auxiliaryNode.getHash()
+                        + "\"];");
+                auxiliaryNode = auxiliaryNode.getNextNode();
+                index++;
+            }
+
+            for (int i = 0; i < (index - 1); i++) {
+                stringBuilder.append("\n\t" +"N" + i + " -> N" + (i + 1) + "[color=\"#E91E63\"];");
+                stringBuilder.append("\n\t" +"N" + (i + 1) + " -> N" + i + "[color=\"#E91E63\"];");
+            }
+        }
+
+        stringBuilder.append("\n}");
+        return stringBuilder.toString();
     }
 }

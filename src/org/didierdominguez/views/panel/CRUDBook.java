@@ -13,6 +13,7 @@ import org.didierdominguez.beans.Category;
 import org.didierdominguez.beans.SessionProperties;
 import org.didierdominguez.controllers.CategoryController;
 import org.didierdominguez.util.Alert;
+import org.didierdominguez.util.JSONBlock;
 import org.didierdominguez.util.ScreenSize;
 import org.didierdominguez.util.Verifications;
 
@@ -125,6 +126,11 @@ class CreateBook {
                                 fieldEditorial.getText(), Integer.parseInt(fieldYear.getText().trim()),
                                 Integer.parseInt(fieldEdition.getText().trim()), category, fieldLanguage.getText(),
                                 SessionProperties.getInstance().getUser());
+                        JSONBlock.getInstance().addBook(new Book(
+                                Integer.parseInt(fieldID.getText().trim()), fieldTitle.getText(), fieldAuthor.getText(),
+                                fieldEditorial.getText(), Integer.parseInt(fieldYear.getText().trim()),
+                                Integer.parseInt(fieldEdition.getText().trim()), category, fieldLanguage.getText(),
+                                SessionProperties.getInstance().getUser()));
                         CategoryView.getInstance().updateTableViewItemsBook(category);
                         Alert.getInstance().showNotification("CATEGORIAS", "LIBRO AGREGADO EXITOSAMENTE");
                     }
@@ -150,8 +156,6 @@ class ShowBook {
         }
         return instance;
     }
-
-
 
     GridPane getGridPane(Book book) {
         GridPane gridPane = new GridPane();

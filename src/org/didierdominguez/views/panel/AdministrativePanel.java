@@ -7,6 +7,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.didierdominguez.Main;
 import org.didierdominguez.beans.SessionProperties;
+import org.didierdominguez.controllers.BlockController;
+import org.didierdominguez.util.JSONBlock;
 import org.didierdominguez.util.ScreenSize;
 import org.didierdominguez.views.login.Login;
 
@@ -94,8 +96,7 @@ public class AdministrativePanel {
         btnSyncUp.setPrefSize(x, y / 8);
         btnSyncUp.setButtonType(JFXButton.ButtonType.FLAT);
         btnSyncUp.setOnAction(event -> {
-            selectButton(btnSyncUp);
-            vBoxPanels.getChildren().clear();
+            BlockController.getInstance().addLastNode();
             // vBoxPanels.getChildren().add(ViewCustomer.getInstance().getViewCustomerDetail());
         });
 
@@ -105,8 +106,7 @@ public class AdministrativePanel {
         btnSettings.setPrefSize(x, y / 8);
         btnSettings.setButtonType(JFXButton.ButtonType.FLAT);
         btnSettings.setOnAction(event -> {
-            selectButton(btnSettings);
-            vBoxPanels.getChildren().clear();
+            // selectButton(btnSettings);
             SettingsView.getInstance().show(hBox, "CONFIGURACION IP");
         });
 

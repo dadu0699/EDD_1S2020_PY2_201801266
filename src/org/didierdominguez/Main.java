@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.didierdominguez.controllers.BlockController;
 import org.didierdominguez.views.panel.AdministrativePanel;
 
 public class Main extends Application {

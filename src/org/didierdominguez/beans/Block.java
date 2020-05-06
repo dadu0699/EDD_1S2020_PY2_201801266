@@ -13,11 +13,11 @@ public class Block {
     private Block nextNode;
     private Block previousNode;
 
-    public Block(int index, String data, String nonce, String previousHASH, String hash) {
-        this.index = index;
+    public Block(String data, String nonce, String hash) {
+        this.index = 0;
         this.data = data;
         this.nonce = nonce;
-        this.previousHASH = previousHASH;
+        this.previousHASH = "";
         this.hash = hash;
         nextNode = null;
         previousNode = null;

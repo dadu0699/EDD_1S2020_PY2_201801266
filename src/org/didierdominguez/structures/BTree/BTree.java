@@ -184,7 +184,7 @@ public class BTree {
         return (node != null);
     }
 
-    private BTreeNode getNode(Integer value) {
+    public BTreeNode getNode(Integer value) {
         BTreeNode node = root;
         while (node != null) {
             Book lesser = node.getKey(0);

@@ -18,11 +18,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.didierdominguez.beans.SessionProperties;
 import org.didierdominguez.beans.User;
+import org.didierdominguez.controllers.BlockController;
 import org.didierdominguez.controllers.UserController;
-import org.didierdominguez.util.Alert;
-import org.didierdominguez.util.FileControl;
-import org.didierdominguez.util.ScreenSize;
-import org.didierdominguez.util.Verifications;
+import org.didierdominguez.util.*;
 
 import java.util.ArrayList;
 
@@ -256,6 +254,8 @@ class CreateUser {
                     UserController.getInstance().insert(Integer.parseInt(fieldID.getText().trim()),
                             fieldName.getText().trim(), fieldLastName.getText().trim(), fieldCareer.getText().trim(),
                             fieldPassword.getText().trim());
+                    user = UserController.getInstance().search(Integer.parseInt(fieldID.getText().trim()));
+                    JSONBlock.getInstance().addUser(user);
                     UserView.getInstance().updateTableViewItems();
                     Alert.getInstance().showNotification("USUARIO", "REGISTRO REALIZADO EXITOSAMENTE");
                 }
@@ -348,11 +348,12 @@ class UpdateUser {
                         "UNO O MÁS DATOS SON INCORRECTOS");
             } else {
                 UserController.getInstance().update(user.getID(), fieldName.getText().trim(),
-                        fieldLastName.getText().trim(), fieldPassword.getText().trim(),
+                        fieldLastName.getText().trim(), fieldCareer.getText().trim(),
                         fieldPassword.getText().trim().toUpperCase());
                 if (UserController.getInstance().update()) {
                     Alert.getInstance().showNotification("USUARIOS",
                             "USUARIO ACTUALIZADO EXITOSAMENTE");
+                    JSONBlock.getInstance().updateUser(user);
                 } else {
                     Alert.getInstance().showAlert(gridPane, "ERROR",
                             "ERROR AL MODIFICAR USUARIO");

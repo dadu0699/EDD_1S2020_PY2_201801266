@@ -21,6 +21,7 @@ import org.didierdominguez.beans.User;
 import org.didierdominguez.controllers.CategoryController;
 import org.didierdominguez.util.Alert;
 import org.didierdominguez.util.FileControl;
+import org.didierdominguez.util.JSONBlock;
 import org.didierdominguez.util.ScreenSize;
 
 import java.util.ArrayList;
@@ -181,6 +182,7 @@ public class CategoryView extends Stage {
             Category category = (Category) tableViewCategory.getSelectionModel().getSelectedItem();
             if (category != null && SessionProperties.getInstance().isAuthenticated()
                     && category.getUser().getID() == SessionProperties.getInstance().getUser().getID()) {
+                JSONBlock.getInstance().deleteCategory(category);
                 CategoryController.getInstance().delete(category.getName());
                 restartHBox();
                 Alert.getInstance().showNotification("CATEGORIAS", "CATEGORIA ELIMINADA EXITOSAMENTE");

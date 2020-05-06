@@ -12,6 +12,7 @@ import org.didierdominguez.beans.Category;
 import org.didierdominguez.beans.SessionProperties;
 import org.didierdominguez.controllers.CategoryController;
 import org.didierdominguez.util.Alert;
+import org.didierdominguez.util.JSONBlock;
 import org.didierdominguez.util.ScreenSize;
 
 public class CRUDCategory {
@@ -66,6 +67,8 @@ class CreateCategory {
                     } else {
                         CategoryController.getInstance().insert(fieldName.getText().trim(),
                                 SessionProperties.getInstance().getUser());
+                        category = CategoryController.getInstance().searchCategoryByName(fieldName.getText().trim());
+                        JSONBlock.getInstance().addCategory(category);
                         CategoryView.getInstance().restartHBox();
                         Alert.getInstance().showNotification("CATEGORIAS", "CATEGORIA AGREGADA EXITOSAMENTE");
                     }

@@ -11,7 +11,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.didierdominguez.beans.Block;
 import org.didierdominguez.beans.User;
+import org.didierdominguez.controllers.BlockController;
 import org.didierdominguez.controllers.CategoryController;
 import org.didierdominguez.controllers.UserController;
 import org.didierdominguez.util.FileControl;
@@ -138,6 +140,21 @@ public class ReportView {
         btnBlock.setButtonType(JFXButton.ButtonType.FLAT);
         btnBlock.setPrefSize(x, y);
         btnBlock.setOnAction(event -> {
+            FileControl.getInstance().writeFile(BlockController.getInstance().getGraph(),
+                "blockChain.dot");
+            FileControl.getInstance().generateDot("blockChain");
+
+            String path = System.getProperty("user.dir") + "\\blockChain.png";
+            File directory = new File(path);
+
+            if (directory.exists()) {
+                try {
+                    Image image = new Image(new FileInputStream(path));
+                    imageView.setImage(image);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
 

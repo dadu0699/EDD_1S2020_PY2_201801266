@@ -14,12 +14,12 @@ import org.json.simple.parser.ParseException;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class FileControl {
     private static FileControl instance;
-    private String directory;
-    private FileChooser fileChooser;
+    private final String directory;
     private File fileControl;
 
     private FileControl() {
@@ -34,7 +34,7 @@ public class FileControl {
     }
 
     public void uploadFile(String description, String extension) {
-        fileChooser = new FileChooser();
+        FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new java.io.File(directory));
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(description, extension));
 
@@ -51,7 +51,7 @@ public class FileControl {
             if (fileControl != null) {
                 // BufferedReader bufferedReader = new BufferedReader(new FileReader(fileControl));
                 BufferedReader bufferedReader = new BufferedReader(
-                        new InputStreamReader(new FileInputStream(fileControl), "UTF-8"));
+                        new InputStreamReader(new FileInputStream(fileControl), StandardCharsets.UTF_8));
                 while ((command = bufferedReader.readLine()) != null) {
                     System.out.println(command);
                     arrayList.add(command);
@@ -72,7 +72,7 @@ public class FileControl {
     }
 
     public void writeFile(String content, String name) {
-        createFolder();
+        // createFolder();
         File file = null;
 
         try {
@@ -81,14 +81,15 @@ public class FileControl {
             PrintWriter printWriter = new PrintWriter(fileWriter, true);
             printWriter.println(content);
             printWriter.close();
-        } catch (IOException ex) {
+        } catch (IOException ignored) {
+            System.out.println(ignored);
         }
 
-        if (!Desktop.isDesktopSupported()) {
+        /*if (!Desktop.isDesktopSupported()) {
             System.out.println("Desktop is not supported");
             return;
         }
-        /*Desktop desktop = Desktop.getDesktop();
+        Desktop desktop = Desktop.getDesktop();
         if (file.exists()) {
             try {
                 desktop.open(file);
@@ -104,7 +105,7 @@ public class FileControl {
         try {
             //Run a bat file
             Process process = Runtime.getRuntime().exec(
-                    "cmd /c "+ dotCommand, null, new File(directory));
+                    "cmd /c " + dotCommand, null, new File(directory));
 
             StringBuilder output = new StringBuilder();
 
@@ -118,14 +119,9 @@ public class FileControl {
 
             int exitVal = process.waitFor();
             if (exitVal == 0) {
-                System.out.println("Success!");
-            } else {
-                //abnormal...
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+                // System.out.println("Success!");
+            }  //abnormal...
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -135,13 +131,13 @@ public class FileControl {
         try {
             if (fileControl != null) {
                 Object obj = parser.parse(new InputStreamReader(
-                        new FileInputStream(fileControl), "UTF-8"));
+                        new FileInputStream(fileControl), StandardCharsets.UTF_8));
                 JSONObject jsonObject = (JSONObject) obj;
 
                 JSONArray tags = (JSONArray) jsonObject.get("Usuarios");
-                for (int i = 0; i < tags.size(); i++) {
+                for (Object tag : tags) {
                     // System.out.println(tags.get(i));
-                    JSONObject innerObject = (JSONObject) tags.get(i);
+                    JSONObject innerObject = (JSONObject) tag;
 
                     long id = (long) innerObject.get("Carnet");
                     String name = (String) innerObject.get("Nombre");
@@ -154,6 +150,8 @@ public class FileControl {
                     } else {
                         UserController.getInstance().insert(Integer.parseInt(String.valueOf(id)), name, lastName,
                                 career, password);
+                        user = UserController.getInstance().search(Integer.parseInt(String.valueOf(id)));
+                        JSONBlock.getInstance().addUser(user);
                         Alert.getInstance().showNotification("USUARIO", "REGISTRO REALIZADO EXITOSAMENTE");
                     }
                 }
@@ -169,13 +167,13 @@ public class FileControl {
         try {
             if (fileControl != null) {
                 Object obj = parser.parse(new InputStreamReader(
-                        new FileInputStream(fileControl), "UTF-8"));
+                        new FileInputStream(fileControl), StandardCharsets.UTF_8));
                 JSONObject jsonObject = (JSONObject) obj;
 
                 JSONArray tags = (JSONArray) jsonObject.get("Libros");
-                for (int i = 0; i < tags.size(); i++) {
+                for (Object tag : tags) {
                     // System.out.println(tags.get(i));
-                    JSONObject innerObject = (JSONObject) tags.get(i);
+                    JSONObject innerObject = (JSONObject) tag;
 
                     long isbn = (long) innerObject.get("ISBN");
                     long year = (long) innerObject.get("Año");
@@ -206,6 +204,10 @@ public class FileControl {
                         categoryS.getBooks().add(Integer.parseInt(String.valueOf(isbn)), title, author, editorial,
                                 Integer.parseInt(String.valueOf(year)), Integer.parseInt(String.valueOf(edition)),
                                 categoryS, language, SessionProperties.getInstance().getUser());
+                        JSONBlock.getInstance().addBook(new Book(Integer.parseInt(String.valueOf(isbn)), title, author,
+                                editorial, Integer.parseInt(String.valueOf(year)),
+                                Integer.parseInt(String.valueOf(edition)), categoryS, language,
+                                SessionProperties.getInstance().getUser()));
                         Alert.getInstance().showNotification("LIBRO", "LIBRO AGREGADO EXITOSAMENTE");
                     }
                 }

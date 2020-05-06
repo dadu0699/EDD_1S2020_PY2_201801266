@@ -20,6 +20,7 @@ import org.didierdominguez.beans.User;
 import org.didierdominguez.controllers.CategoryController;
 import org.didierdominguez.util.Alert;
 import org.didierdominguez.util.FileControl;
+import org.didierdominguez.util.JSONBlock;
 import org.didierdominguez.util.ScreenSize;
 
 import java.util.ArrayList;
@@ -116,7 +117,7 @@ public class BookView {
                     && book.getUser().getID() == SessionProperties.getInstance().getUser().getID()) {
                 CategoryController.getInstance().deleteBook(
                         (Category) ((Book) tableView.getSelectionModel().getSelectedItem()).getCategory(), book);
-
+                JSONBlock.getInstance().deleteBook(book);
                 updateTableViewItems();
                 Alert.getInstance().showNotification("LIBROS", "LIBRO ELIMINADO EXITOSAMENTE");
             }
