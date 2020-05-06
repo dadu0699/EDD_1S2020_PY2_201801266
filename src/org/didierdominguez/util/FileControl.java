@@ -7,8 +7,6 @@ import org.didierdominguez.beans.SessionProperties;
 import org.didierdominguez.beans.User;
 import org.didierdominguez.controllers.CategoryController;
 import org.didierdominguez.controllers.UserController;
-import org.didierdominguez.views.panel.CategoryView;
-import org.didierdominguez.views.panel.UserView;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

@@ -1,8 +1,6 @@
 package org.didierdominguez.structures.BTree;
 
 import org.didierdominguez.beans.Book;
-import org.didierdominguez.beans.Category;
-import org.didierdominguez.beans.User;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -33,7 +31,7 @@ public class BTreeNode {
 
     public int indexOf(Integer value) {
         for (int i = 0; i < keysSize; i++) {
-            if (keys[i].equals(value)) {
+            if (keys[i].getISBN().equals(value)) {
                 return i;
             }
         }

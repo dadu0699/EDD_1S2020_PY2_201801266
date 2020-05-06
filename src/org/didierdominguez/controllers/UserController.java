@@ -189,6 +189,7 @@ public class UserController {
         stringBuilder.append("\n\tnode[shape=record, style=filled color=\"#393C4BFF\" fillcolor=\"#393C4BFF\", " +
                 "fontcolor = \"#F8F8F2FF\"];");
 
+        // int i = table.length-1; i >= 0; i--
         for (int i = 0; i < table.length; i++) {
             stringBuilder.append("\n\tBucket" + i + "[label =\"Bucket " + i + "\"];");
             User user = table[i];

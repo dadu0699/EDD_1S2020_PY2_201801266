@@ -11,7 +11,7 @@ public class BlockController {
     private Block firstNode;
     private Block lastNode;
     private String hash;
-    private int nonce;
+    private Integer nonce;
 
     private BlockController() {
         firstNode = null;
@@ -150,17 +150,19 @@ public class BlockController {
         }
 
         String aux = getSHA(newData);
-        System.out.println(newData);
-        System.out.println(nonce);
-        System.out.println(aux);
+        /*
+            System.out.println(newData);
+            System.out.println(nonce);
+            System.out.println(aux);
+         */
 
         hash = aux;
-        /*if (aux.startsWith("0000")) {
+        if (aux.startsWith("000")) {
             hash = aux;
             return;
         } else {
             nonce++;
             getHash(data);
-        }*/
+        }
     }
 }
