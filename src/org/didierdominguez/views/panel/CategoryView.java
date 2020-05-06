@@ -159,6 +159,20 @@ public class CategoryView extends Stage {
         buttonAdd.setPrefSize(x, y);
         buttonAdd.setOnAction(event -> restartHBox());
 
+        JFXButton buttonReport = new JFXButton("ARBOL B");
+        buttonReport.getStyleClass().addAll("customButton", "primaryButton");
+        buttonReport.setButtonType(JFXButton.ButtonType.FLAT);
+        buttonReport.setPrefSize(x, y);
+        buttonReport.setOnAction(event -> {
+            Category category = (Category) tableViewCategory.getSelectionModel().getSelectedItem();
+            if (category != null) {
+                FileControl.getInstance().writeFile(CategoryController.getInstance().graphBTree(category),
+                        "BTree.dot");
+                FileControl.getInstance().generateDot("BTree");
+                Alert.getInstance().showNotification("CATEGORIAS", "REPORTE DE LIBROS GENERADO");
+            }
+        });
+
         JFXButton buttonDelete = new JFXButton("ELIMINAR");
         buttonDelete.getStyleClass().addAll("customButton", "dangerButton");
         buttonDelete.setButtonType(JFXButton.ButtonType.FLAT);
@@ -173,9 +187,10 @@ public class CategoryView extends Stage {
             }
         });
 
-        hBoxButtons.getChildren().addAll(buttonFile, buttonAdd, buttonDelete);
+        hBoxButtons.getChildren().addAll(buttonFile, buttonAdd, buttonReport, buttonDelete);
         hBoxButtons.setMargin(buttonFile, new Insets(0, 5, 0, 0));
         hBoxButtons.setMargin(buttonAdd, new Insets(0, 5, 0, 0));
+        hBoxButtons.setMargin(buttonReport, new Insets(0, 5, 0, 0));
         hBoxButtons.setPrefSize(x, y / 8);
         gridPane.add(hBoxButtons, 0, 2);
 

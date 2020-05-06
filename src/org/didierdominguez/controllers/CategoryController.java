@@ -284,20 +284,20 @@ public class CategoryController {
         StringBuilder stringBuilder = new StringBuilder();
 
         int indexParentNode = indexNode;
-        stringBuilder.append("\n\tN" + indexNode + "[label = \"" + category.getName() + "\"]; ");
+        stringBuilder.append("\n\tN" + indexNode + "[label = \"" + category.getName() + "\"];");
 
         if (category.getLeftNode() != null) {
             indexNode++;
             int indexLeftNode = indexNode;
             stringBuilder.append(graphTreeAVL(category.getLeftNode()));
-            stringBuilder.append("\n\tN" + indexParentNode + " -> N" + indexLeftNode + "; ");
+            stringBuilder.append("\n\tN" + indexParentNode + " -> N" + indexLeftNode + "[color=\"#E91E63\"];");
         }
 
         if (category.getRightNode() != null) {
             indexNode++;
             int indexRightNode = indexNode;
             stringBuilder.append(graphTreeAVL(category.getRightNode()));
-            stringBuilder.append("\n\tN" + indexParentNode + " -> N" + indexRightNode + "; ");
+            stringBuilder.append("\n\tN" + indexParentNode + " -> N" + indexRightNode + "[color=\"#E91E63\"];");
         }
         return stringBuilder.toString();
     }
@@ -305,7 +305,9 @@ public class CategoryController {
     public String graphTreeAVL() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("digraph G {");
-        stringBuilder.append("\n\tnode[style=filled fillcolor=cornsilk2];");
+        stringBuilder.append("\n\tgraph [bgcolor=transparent];");
+        stringBuilder.append("\n\tnode[style=filled color=\"#393C4BFF\" fillcolor=\"#393C4BFF\", " +
+                "fontcolor = \"#F8F8F2FF\"];");
 
         if (root != null) {
             indexNode = 0;
@@ -353,15 +355,17 @@ public class CategoryController {
     public String graphInOrder() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\tgraph [bgcolor=transparent];");
         stringBuilder.append("\n\trankdir = LR;");
-        stringBuilder.append("\n\tnode[shape=record, style=filled fillcolor=cornsilk2];");
+        stringBuilder.append("\n\tnode[shape=record, style=filled color=\"#393C4BFF\" fillcolor=\"#393C4BFF\", " +
+                "fontcolor = \"#F8F8F2FF\"];");
 
         if (root != null) {
             indexNode = -1;
             stringBuilder.append(graphInOrder(root));
 
             for (int i = 0; i < indexNode; i++) {
-                stringBuilder.append("\n\tN" + i + " -> N" + (i + 1) + ";");
+                stringBuilder.append("\n\tN" + i + " -> N" + (i + 1) + "[color=\"#E91E63\"];");
             }
         }
 
@@ -372,15 +376,17 @@ public class CategoryController {
     public String graphPreOrder() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\tgraph [bgcolor=transparent];");
         stringBuilder.append("\n\trankdir = LR;");
-        stringBuilder.append("\n\tnode[shape=record, style=filled fillcolor=cornsilk2];");
+        stringBuilder.append("\n\tnode[shape=record, style=filled color=\"#393C4BFF\" fillcolor=\"#393C4BFF\", " +
+                "fontcolor = \"#F8F8F2FF\"];");
 
         if (root != null) {
             indexNode = -1;
             stringBuilder.append(graphPreOrder(root));
 
             for (int i = 0; i < indexNode; i++) {
-                stringBuilder.append("\n\tN" + i + " -> N" + (i + 1) + ";");
+                stringBuilder.append("\n\tN" + i + " -> N" + (i + 1) + "[color=\"#E91E63\"];");
             }
         }
 
@@ -392,15 +398,17 @@ public class CategoryController {
     public String graphPostOrder() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\tgraph [bgcolor=transparent];");
         stringBuilder.append("\n\trankdir = LR;");
-        stringBuilder.append("\n\tnode[shape=record, style=filled fillcolor=cornsilk2];");
+        stringBuilder.append("\n\tnode[shape=record, style=filled color=\"#393C4BFF\" fillcolor=\"#393C4BFF\", " +
+                "fontcolor = \"#F8F8F2FF\"];");
 
         if (root != null) {
             indexNode = -1;
             stringBuilder.append(graphPostOrder(root));
 
             for (int i = 0; i < indexNode; i++) {
-                stringBuilder.append("\n\tN" + i + " -> N" + (i + 1) + ";");
+                stringBuilder.append("\n\tN" + i + " -> N" + (i + 1) + "[color=\"#E91E63\"];");
             }
         }
 
@@ -411,8 +419,10 @@ public class CategoryController {
     public String graphBTree(Category category) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("digraph G {");
-        stringBuilder.append("\n\t rankdir = TB;");
-        stringBuilder.append("\n\t node[shape=record, height=.1, style=filled fillcolor=cornsilk2];");
+        stringBuilder.append("\n\tgraph [bgcolor=transparent];");
+        stringBuilder.append("\n\trankdir = TB;");
+        stringBuilder.append("\n\tnode[shape=record, height=.1, style=filled color=\"#393C4BFF\" " +
+                "fillcolor=\"#393C4BFF\", fontcolor = \"#F8F8F2FF\"];");
         stringBuilder.append(category.getBooks().graph(category.getBooks().root));
         stringBuilder.append("\n}");
         return  stringBuilder.toString();

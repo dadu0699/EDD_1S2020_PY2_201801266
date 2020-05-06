@@ -92,6 +92,17 @@ public class ReportView {
         btnB.setButtonType(JFXButton.ButtonType.FLAT);
         btnB.setPrefSize(x, y);
         btnB.setOnAction(event -> {
+            String path = System.getProperty("user.dir") + "\\BTree.png";
+            File directory = new File(path);
+
+            if (directory.exists()) {
+                try {
+                    Image image = new Image(new FileInputStream(path));
+                    imageView.setImage(image);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         JFXButton btnTH = new JFXButton("TABLA DISPERSION");

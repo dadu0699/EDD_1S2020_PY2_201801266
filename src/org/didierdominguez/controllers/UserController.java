@@ -184,8 +184,10 @@ public class UserController {
     public String getGraph() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\t graph [bgcolor=transparent];");
         stringBuilder.append("\n\trankdir = LR;");
-        stringBuilder.append("\n\tnode[shape=record, style=filled fillcolor=cornsilk2];");
+        stringBuilder.append("\n\tnode[shape=record, style=filled color=\"#393C4BFF\" fillcolor=\"#393C4BFF\", " +
+                "fontcolor = \"#F8F8F2FF\"];");
 
         for (int i = 0; i < table.length; i++) {
             stringBuilder.append("\n\tBucket" + i + "[label =\"Bucket " + i + "\"];");
@@ -200,8 +202,8 @@ public class UserController {
                         + user.getPassword() + "\\n"
                         + "\"];");
 
-                stringBuilder.append("\n\tBucket" + i + " ->"
-                        + user.getID() + ";");
+                stringBuilder.append("\n\tBucket" + i + " -> "
+                        + user.getID() + "[color=\"#E91E63\"];");
             }
 
             while (user != null) {
@@ -214,8 +216,8 @@ public class UserController {
                             + user.getNextUser().getPassword() + "\\n"
                             + "\"];");
 
-                    stringBuilder.append("\n\t" + user.getID() + " ->"
-                            + user.getNextUser().getID() + ";");
+                    stringBuilder.append("\n\t" + user.getID() + " -> "
+                            + user.getNextUser().getID() + "[color=\"#E91E63\"];");
                 }
                 user = user.getNextUser();
             }

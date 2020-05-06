@@ -523,7 +523,7 @@ public class BTree {
 
     public String graph(BTreeNode aux) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n\tnode" + aux.keys[0] + "[label=\"");
+        stringBuilder.append("\n\tnode" + aux.keys[0].getISBN() + "[label=\"");
 
         int n = aux.numberOfKeys();
         boolean isLeaf = aux.numberOfChildren() == 0;
@@ -532,7 +532,7 @@ public class BTree {
             if (!isLeaf) {
                 stringBuilder.append("<f").append(i).append(">|");
             }
-            stringBuilder.append(aux.keys[i]);
+            stringBuilder.append(aux.keys[i].getISBN() + " " + aux.keys[i].getTitle());
             if (i < n - 1) {
                 stringBuilder.append("|");
             }
@@ -541,7 +541,7 @@ public class BTree {
             stringBuilder.append("|<f").append(n).append(">");
         }
 
-        stringBuilder.append("\"];");
+        stringBuilder.append("\", color=\"#9E9BA3\"];");
 
         for (int i = 0; i < n; i++) {
             if (!isLeaf) {
@@ -555,8 +555,8 @@ public class BTree {
 
         for (int i = 0; i < n + 1; i++) {
             if (!isLeaf) {
-                stringBuilder.append("\n\tnode" + aux.keys[0] + ":f"
-                        + i + " -> node" + aux.children[i].keys[0] + ";");
+                stringBuilder.append("\n\tnode" + aux.keys[0].getISBN() + ":f"
+                        + i + " -> node" + aux.children[i].keys[0].getISBN() + "[color=\"#E91E63\"];");
             }
         }
         return stringBuilder.toString();
