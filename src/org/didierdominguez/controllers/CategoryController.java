@@ -407,4 +407,14 @@ public class CategoryController {
         stringBuilder.append("\n}");
         return stringBuilder.toString();
     }
+
+    public String graphBTree(Category category) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("digraph G {");
+        stringBuilder.append("\n\t rankdir = TB;");
+        stringBuilder.append("\n\t node[shape=record, height=.1, style=filled fillcolor=cornsilk2];");
+        stringBuilder.append(category.getBooks().graph(category.getBooks().root));
+        stringBuilder.append("\n}");
+        return  stringBuilder.toString();
+    }
 }

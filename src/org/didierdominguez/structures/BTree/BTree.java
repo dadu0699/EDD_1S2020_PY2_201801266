@@ -506,18 +506,59 @@ public class BTree {
             if (node.children != null) {
                 for (int i = 0; i < node.numberOfChildren() - 1; i++) {
                     BTreeNode obj = node.getChild(i);
-                    for (Book book:getBooks(obj)) {
+                    for (Book book : getBooks(obj)) {
                         arrayList.add(book);
                     }
                 }
                 if (node.numberOfChildren() >= 1) {
                     BTreeNode obj = node.getChild(node.numberOfChildren() - 1);
-                    for (Book book:getBooks(obj)) {
+                    for (Book book : getBooks(obj)) {
                         arrayList.add(book);
                     }
                 }
             }
         }
         return arrayList;
+    }
+
+    public String graph(BTreeNode aux) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\n\tnode" + aux.keys[0] + "[label=\"");
+
+        int n = aux.numberOfKeys();
+        boolean isLeaf = aux.numberOfChildren() == 0;
+
+        for (int i = 0; i < n; i++) {
+            if (!isLeaf) {
+                stringBuilder.append("<f").append(i).append(">|");
+            }
+            stringBuilder.append(aux.keys[i]);
+            if (i < n - 1) {
+                stringBuilder.append("|");
+            }
+        }
+        if (!isLeaf) {
+            stringBuilder.append("|<f").append(n).append(">");
+        }
+
+        stringBuilder.append("\"];");
+
+        for (int i = 0; i < n; i++) {
+            if (!isLeaf) {
+                stringBuilder.append(graph(aux.children[i]));
+            }
+        }
+
+        if (!isLeaf) {
+            stringBuilder.append(graph(aux.children[n]));
+        }
+
+        for (int i = 0; i < n + 1; i++) {
+            if (!isLeaf) {
+                stringBuilder.append("\n\tnode" + aux.keys[0] + ":f"
+                        + i + " -> node" + aux.children[i].keys[0] + ";");
+            }
+        }
+        return stringBuilder.toString();
     }
 }

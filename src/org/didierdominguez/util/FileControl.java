@@ -14,9 +14,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class FileControl {
     private static FileControl instance;
@@ -64,6 +64,72 @@ public class FileControl {
             System.out.println("The file was not found");
         }
         return null;
+    }
+
+    private void createFolder() {
+        File directory = new File(this.directory);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+    }
+
+    public void writeFile(String content, String name) {
+        createFolder();
+        File file = null;
+
+        try {
+            file = new File(directory + "/" + name);
+            FileWriter fileWriter = new FileWriter(file, false);
+            PrintWriter printWriter = new PrintWriter(fileWriter, true);
+            printWriter.println(content);
+            printWriter.close();
+        } catch (IOException ex) {
+        }
+
+        if (!Desktop.isDesktopSupported()) {
+            System.out.println("Desktop is not supported");
+            return;
+        }
+        /*Desktop desktop = Desktop.getDesktop();
+        if (file.exists()) {
+            try {
+                desktop.open(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
+    }
+
+    public void generateDot(String name) {
+        String dotCommand = "dot.exe -Tpng " + name + ".dot -o " + name + ".png";
+
+        try {
+            //Run a bat file
+            Process process = Runtime.getRuntime().exec(
+                    "cmd /c "+ dotCommand, null, new File(directory));
+
+            StringBuilder output = new StringBuilder();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line + "\n");
+            }
+
+            int exitVal = process.waitFor();
+            if (exitVal == 0) {
+                System.out.println("Success!");
+            } else {
+                //abnormal...
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void readUserJSON() {

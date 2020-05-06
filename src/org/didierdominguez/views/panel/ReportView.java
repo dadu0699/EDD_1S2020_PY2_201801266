@@ -3,7 +3,9 @@ package org.didierdominguez.views.panel;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -12,7 +14,12 @@ import javafx.scene.text.Text;
 import org.didierdominguez.beans.User;
 import org.didierdominguez.controllers.CategoryController;
 import org.didierdominguez.controllers.UserController;
+import org.didierdominguez.util.FileControl;
 import org.didierdominguez.util.ScreenSize;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class ReportView {
     private static ReportView instance;
@@ -41,6 +48,7 @@ public class ReportView {
     public HBox getReportView() {
         hBox = new HBox();
         gridPane = new GridPane();
+        imageView = new ImageView();
 
         double x = ScreenSize.getInstance().getX();
         double y = ScreenSize.getInstance().getY();
@@ -63,7 +71,20 @@ public class ReportView {
         btnAVL.setButtonType(JFXButton.ButtonType.FLAT);
         btnAVL.setPrefSize(x, y);
         btnAVL.setOnAction(event -> {
-            System.out.println(CategoryController.getInstance().graphTreeAVL());
+            FileControl.getInstance().writeFile(CategoryController.getInstance().graphTreeAVL(),
+                    "treeAVL.dot");
+            FileControl.getInstance().generateDot("treeAVL");
+
+            String path = System.getProperty("user.dir") + "\\treeAVL.png";
+            File directory = new File(path);
+            if (directory.exists()) {
+                try {
+                    Image image = new Image(new FileInputStream(path));
+                    imageView.setImage(image);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         JFXButton btnB = new JFXButton("ARBOL B");
@@ -78,7 +99,20 @@ public class ReportView {
         btnTH.setButtonType(JFXButton.ButtonType.FLAT);
         btnTH.setPrefSize(x, y);
         btnTH.setOnAction(event -> {
-            System.out.println(UserController.getInstance().getGraph());
+            FileControl.getInstance().writeFile(UserController.getInstance().getGraph(),
+                    "hashtable.dot");
+            FileControl.getInstance().generateDot("hashtable");
+
+            String path = System.getProperty("user.dir") + "\\hashtable.png";
+            File directory = new File(path);
+            if (directory.exists()) {
+                try {
+                    Image image = new Image(new FileInputStream(path));
+                    imageView.setImage(image);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         JFXButton btnList = new JFXButton("LISTA");
@@ -102,7 +136,7 @@ public class ReportView {
         hBoxButtons.setMargin(btnB, new Insets(0, 5, 0, 0));
         hBoxButtons.setMargin(btnTH, new Insets(0, 5, 0, 0));
         hBoxButtons.setMargin(btnList, new Insets(0, 5, 0, 0));
-        gridPane.add(hBoxButtons, 0, 1,1,1);
+        gridPane.add(hBoxButtons, 0, 1, 1, 1);
 
         HBox hBoxButtons2 = new HBox();
         JFXButton btnPreorder = new JFXButton("PREORDEN");
@@ -110,7 +144,20 @@ public class ReportView {
         btnPreorder.setButtonType(JFXButton.ButtonType.FLAT);
         btnPreorder.setPrefSize(x, y);
         btnPreorder.setOnAction(event -> {
-            System.out.println(CategoryController.getInstance().graphPreOrder());
+            FileControl.getInstance().writeFile(CategoryController.getInstance().graphPreOrder(),
+                    "preOrder.dot");
+            FileControl.getInstance().generateDot("preOrder");
+
+            String path = System.getProperty("user.dir") + "\\preOrder.png";
+            File directory = new File(path);
+            if (directory.exists()) {
+                try {
+                    Image image = new Image(new FileInputStream(path));
+                    imageView.setImage(image);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         JFXButton btnInorder = new JFXButton("INORDEN");
@@ -118,7 +165,20 @@ public class ReportView {
         btnInorder.setButtonType(JFXButton.ButtonType.FLAT);
         btnInorder.setPrefSize(x, y);
         btnInorder.setOnAction(event -> {
-            System.out.println(CategoryController.getInstance().graphInOrder());
+            FileControl.getInstance().writeFile(CategoryController.getInstance().graphInOrder(),
+                    "inOrder.dot");
+            FileControl.getInstance().generateDot("inOrder");
+
+            String path = System.getProperty("user.dir") + "\\inOrder.png";
+            File directory = new File(path);
+            if (directory.exists()) {
+                try {
+                    Image image = new Image(new FileInputStream(path));
+                    imageView.setImage(image);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         JFXButton btnPostOrder = new JFXButton("POSTORDEN");
@@ -126,20 +186,38 @@ public class ReportView {
         btnPostOrder.setButtonType(JFXButton.ButtonType.FLAT);
         btnPostOrder.setPrefSize(x, y);
         btnPostOrder.setOnAction(event -> {
-            System.out.println(CategoryController.getInstance().graphPostOrder());
+            FileControl.getInstance().writeFile(CategoryController.getInstance().graphPostOrder(),
+                    "postOrder.dot");
+            FileControl.getInstance().generateDot("postOrder");
+
+            String path = System.getProperty("user.dir") + "\\postOrder.png";
+            File directory = new File(path);
+
+            if (directory.exists()) {
+                try {
+                    Image image = new Image(new FileInputStream(path));
+                    imageView.setImage(image);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         hBoxButtons2.getChildren().addAll(btnPreorder, btnInorder, btnPostOrder);
         hBoxButtons2.setPrefSize(x, y / 10);
         hBoxButtons2.setMargin(btnPreorder, new Insets(0, 5, 0, 0));
         hBoxButtons2.setMargin(btnInorder, new Insets(0, 5, 0, 0));
-        gridPane.add(hBoxButtons2, 0, 2,1,1);
+        gridPane.add(hBoxButtons2, 0, 2, 1, 1);
 
-        imageView = new ImageView();
-        imageView.setFitWidth(x/2);
+
+        //imageView.setFitWidth(x / 2);
+        //imageView.setFitHeight(y / 2);
         imageView.setPreserveRatio(true);
-        gridPane.add(imageView, 0, 3);
-        gridPane.setMargin(imageView, new Insets(-10, -5, -25, 0));
+        ScrollPane sp = new ScrollPane();
+        sp.setPrefHeight(4 * y / 5);
+        sp.setPrefWidth(x);
+        sp.setContent(imageView);
+        gridPane.add(sp, 0, 3);
 
         hBox.getChildren().add(gridPane);
 
