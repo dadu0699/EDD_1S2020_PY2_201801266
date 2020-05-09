@@ -47,7 +47,7 @@ public class BlockController {
         }
         lastNode = node;
 
-        getHash((node.getIndex() + node.getDate() + node.getPreviousNode() + node.getData())
+        getHash((node.getIndex() + node.getDate() + node.getPreviousHASH() + node.getData())
                 .replace(" ", ""));
         node.setHash(hash);
         node.setNonce(String.valueOf(nonce));
