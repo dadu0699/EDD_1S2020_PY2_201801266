@@ -4,6 +4,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.didierdominguez.beans.Block;
 import org.didierdominguez.util.JSONBlock;
 
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -11,8 +12,8 @@ public class BlockController {
     private static BlockController instance;
     private Block firstNode;
     private Block lastNode;
-    private String hash;
-    private Integer nonce;
+    private static String hash;
+    private static BigInteger nonce;
 
     private BlockController() {
         firstNode = null;
@@ -31,8 +32,6 @@ public class BlockController {
     }
 
     public void addLastNode() {
-        nonce = 0;
-        hash = "";
         String data = "";
 
         Block node = new Block(data, String.valueOf(nonce), hash);
@@ -48,8 +47,8 @@ public class BlockController {
         }
         lastNode = node;
 
-        /*getHash((node.getIndex() + node.getDate() + node.getPreviousNode() + node.getData())
-                .replace(" ", ""));*/
+        getHash((node.getIndex() + node.getDate() + node.getPreviousNode() + node.getData())
+                .replace(" ", ""));
         node.setHash(hash);
         node.setNonce(String.valueOf(nonce));
         JSONBlock.getInstance().generateJSON(node);
@@ -65,7 +64,7 @@ public class BlockController {
         System.out.println();
     }
 
-    private String getSHA(String input) {
+    private static String getSHA(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(
@@ -77,22 +76,19 @@ public class BlockController {
         return null;
     }
 
-    public void getHash(String data) {
-        String newData = data;
-        if (nonce > 0) {
-            newData = data + nonce;
+    public static void getHash(String data) {
+        nonce = new BigInteger("0");
+        String aux = getSHA(data);
+
+        while (true) {
+            if (aux.startsWith("0000")){
+                break;
+            }
+            nonce = nonce.add(BigInteger.ONE);
+            aux = getSHA(data+nonce);
         }
-
-        String aux = getSHA(newData);
-
         hash = aux;
-        if (aux.startsWith("000")) {
-            hash = aux;
-            return;
-        } else {
-            nonce++;
-            getHash(data);
-        }
+        System.out.println(hash);
     }
 
     public String getGraph() {
