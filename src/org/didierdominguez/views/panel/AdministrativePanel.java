@@ -96,7 +96,9 @@ public class AdministrativePanel {
         btnSyncUp.setPrefSize(x, y / 8);
         btnSyncUp.setButtonType(JFXButton.ButtonType.FLAT);
         btnSyncUp.setOnAction(event -> {
-            BlockController.getInstance().addLastNode();
+            if (JSONBlock.getInstance().isPossible()) {
+                BlockController.getInstance().addLastNode();
+            }
             // vBoxPanels.getChildren().add(ViewCustomer.getInstance().getViewCustomerDetail());
         });
 

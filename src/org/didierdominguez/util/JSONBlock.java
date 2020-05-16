@@ -45,6 +45,11 @@ public class JSONBlock {
         return data;
     }
 
+    public boolean isPossible(){
+        return !(createUsersList.isEmpty() && updateUserList.isEmpty() && createBookList.isEmpty()
+                && deleteBookList.isEmpty() && createCategoryList.isEmpty() && deleteCategoryList.isEmpty());
+    }
+
     public void generateJSON(Block block) {
         JSONObject obj = new JSONObject();
         String name = "block" + block.getIndex() + ".json";
