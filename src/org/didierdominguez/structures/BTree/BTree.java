@@ -40,20 +40,16 @@ public class BTree {
                         // A-OK
                         break;
                     }
-                    // Need to split up
                     split(node);
                     break;
                 }
-                // Navigate
 
-                // Lesser or equal
                 Book lesser = node.getKey(0);
                 if (book.getISBN().compareTo(lesser.getISBN()) <= 0) {
                     node = node.getChild(0);
                     continue;
                 }
 
-                // Greater
                 int numberOfKeys = node.numberOfKeys();
                 int last = numberOfKeys - 1;
                 Book greater = node.getKey(last);
@@ -62,7 +58,6 @@ public class BTree {
                     continue;
                 }
 
-                // Search internal nodes
                 for (int i = 1; i < node.numberOfKeys(); i++) {
                     Book prev = node.getKey(i - 1);
                     Book next = node.getKey(i);
@@ -106,7 +101,6 @@ public class BTree {
         }
 
         if (node.parent == null) {
-            // new root, height of tree is increased
             BTreeNode newRoot = new BTreeNode(null, maxKeySize, maxChildrenSize);
             newRoot.addKey(medianValue);
             node.parent = newRoot;
@@ -115,7 +109,6 @@ public class BTree {
             node.addChild(left);
             node.addChild(right);
         } else {
-            // Move the median value up to the parent
             BTreeNode parent = node.parent;
             parent.addKey(medianValue);
             parent.removeChild(node);
@@ -130,8 +123,7 @@ public class BTree {
 
     public Book remove(Integer value) {
         BTreeNode node = this.getNode(value);
-        Book removed = remove(value, node);
-        return removed;
+        return remove(value, node);
     }
 
     private Book remove(Integer value, BTreeNode node) {
@@ -146,11 +138,9 @@ public class BTree {
             if (node.parent != null && node.numberOfKeys() < minKeySize) {
                 this.combined(node);
             } else if (node.parent == null && node.numberOfKeys() == 0) {
-                // Removing root node with no keys or children
                 root = null;
             }
         } else {
-            // internal node
             BTreeNode lesser = node.getChild(index);
             BTreeNode greatest = this.getGreatestNode(lesser);
             Book replaceValue = this.removeGreatestValue(greatest);
@@ -172,16 +162,6 @@ public class BTree {
             value = node.removeKey(node.numberOfKeys() - 1);
         }
         return value;
-    }
-
-    public void clear() {
-        root = null;
-        size = 0;
-    }
-
-    public boolean contains(Integer value) {
-        BTreeNode node = getNode(value);
-        return (node != null);
     }
 
     public BTreeNode getNode(Integer value) {
@@ -239,8 +219,7 @@ public class BTree {
         return node;
     }
 
-
-    private boolean combined(BTreeNode node) {
+    private void combined(BTreeNode node) {
         BTreeNode parent = node.parent;
         int index = parent.indexOf(node);
         int indexOfLeftNeighbor = index - 1;
@@ -253,9 +232,7 @@ public class BTree {
             rightNeighborSize = rightNeighbor.numberOfKeys();
         }
 
-        // Try to borrow neighbor
         if (rightNeighbor != null && rightNeighborSize > minKeySize) {
-            // Try to borrow from right neighbor
             Book removeValue = rightNeighbor.getKey(0);
             int prev = getIndexOfPreviousValue(parent, removeValue);
             Book parentValue = parent.removeKey(prev);
@@ -274,7 +251,6 @@ public class BTree {
             }
 
             if (leftNeighbor != null && leftNeighborSize > minKeySize) {
-                // Try to borrow from left neighbor
                 Book removeValue = leftNeighbor.getKey(leftNeighbor.numberOfKeys() - 1);
                 int prev = getIndexOfNextValue(parent, removeValue);
                 Book parentValue = parent.removeKey(prev);
@@ -301,16 +277,12 @@ public class BTree {
                 }
 
                 if (parent.parent != null && parent.numberOfKeys() < minKeySize) {
-                    // removing key made parent too small, combined up tree
                     this.combined(parent);
                 } else if (parent.numberOfKeys() == 0) {
-                    // parent no longer has keys, make this node the new root
-                    // which decreases the height of the tree
                     node.parent = null;
                     root = node;
                 }
             } else if (leftNeighbor != null && parent.numberOfKeys() > 0) {
-                // Can't borrow from neighbors, try to combined with left neighbor
                 Book removeValue = leftNeighbor.getKey(leftNeighbor.numberOfKeys() - 1);
                 int prev = getIndexOfNextValue(parent, removeValue);
                 Book parentValue = parent.removeKey(prev);
@@ -326,17 +298,13 @@ public class BTree {
                 }
 
                 if (parent.parent != null && parent.numberOfKeys() < minKeySize) {
-                    // removing key made parent too small, combined up tree
                     this.combined(parent);
                 } else if (parent.numberOfKeys() == 0) {
-                    // parent no longer has keys, make this node the new root
-                    // which decreases the height of the tree
                     node.parent = null;
                     root = node;
                 }
             }
         }
-        return true;
     }
 
     private int getIndexOfPreviousValue(BTreeNode node, Book value) {
@@ -359,139 +327,8 @@ public class BTree {
         return node.numberOfKeys() - 1;
     }
 
-    public int size() {
-        return size;
-    }
-
-    public boolean validate() {
-        if (root == null) {
-            return true;
-        }
-        return validateNode(root);
-    }
-
-    private boolean validateNode(BTreeNode node) {
-        int keySize = node.numberOfKeys();
-        if (keySize > 1) {
-            // Make sure the keys are sorted
-            for (int i = 1; i < keySize; i++) {
-                Book p = node.getKey(i - 1);
-                Book n = node.getKey(i);
-                if (p.getISBN().compareTo(n.getISBN()) > 0) {
-                    return false;
-                }
-            }
-        }
-        int childrenSize = node.numberOfChildren();
-        if (node.parent == null) {
-            // root
-            if (keySize > maxKeySize) {
-                // check max key size. root does not have a min key size
-                return false;
-            } else if (childrenSize == 0) {
-                // if root, no children, and keys are valid
-                return true;
-            } else if (childrenSize < 2) {
-                // root should have zero or at least two children
-                return false;
-            } else if (childrenSize > maxChildrenSize) {
-                return false;
-            }
-        } else {
-            // non-root
-            if (keySize < minKeySize) {
-                return false;
-            } else if (keySize > maxKeySize) {
-                return false;
-            } else if (childrenSize == 0) {
-                return true;
-            } else if (keySize != (childrenSize - 1)) {
-                // If there are chilren, there should be one more child then
-                // keys
-                return false;
-            } else if (childrenSize < minChildrenSize) {
-                return false;
-            } else if (childrenSize > maxChildrenSize) {
-                return false;
-            }
-        }
-
-        BTreeNode first = node.getChild(0);
-        // The first child's last key should be less than the node's first key
-        if (first.getKey(first.numberOfKeys() - 1).getISBN().compareTo(node.getKey(0).getISBN()) > 0) {
-            return false;
-        }
-
-        BTreeNode last = node.getChild(node.numberOfChildren() - 1);
-        // The last child's first key should be greater than the node's last key
-        if (last.getKey(0).getISBN().compareTo(node.getKey(node.numberOfKeys() - 1).getISBN()) < 0) {
-            return false;
-        }
-
-        // Check that each node's first and last key holds it's invariance
-        for (int i = 1; i < node.numberOfKeys(); i++) {
-            Book p = node.getKey(i - 1);
-            Book n = node.getKey(i);
-            BTreeNode c = node.getChild(i);
-            if (p.getISBN().compareTo(c.getKey(0).getISBN()) > 0) {
-                return false;
-            }
-            if (n.getISBN().compareTo(c.getKey(c.numberOfKeys() - 1).getISBN()) < 0) {
-                return false;
-            }
-        }
-
-        for (int i = 0; i < node.childrenSize; i++) {
-            BTreeNode c = node.getChild(i);
-            boolean valid = this.validateNode(c);
-            if (!valid) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public String getString() {
-        return getString(this);
-    }
-
     public ArrayList<Book> getBooks() {
         return getBooks(this.root);
-    }
-
-    private String getString(BTree tree) {
-        if (tree.root == null) {
-            return "Tree has no nodes.";
-        }
-        return getString(tree.root, "", true);
-    }
-
-    private String getString(BTreeNode node, String prefix, boolean isTail) {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append(prefix).append((isTail ? "└── " : "├── "));
-        for (int i = 0; i < node.numberOfKeys(); i++) {
-            Book value = node.getKey(i);
-            builder.append(value.getISBN());
-            if (i < node.numberOfKeys() - 1) {
-                builder.append(", ");
-            }
-        }
-        builder.append("\n");
-
-        if (node.children != null) {
-            for (int i = 0; i < node.numberOfChildren() - 1; i++) {
-                BTreeNode obj = node.getChild(i);
-                builder.append(getString(obj, prefix + (isTail ? "    " : "│   "), false));
-            }
-            if (node.numberOfChildren() >= 1) {
-                BTreeNode obj = node.getChild(node.numberOfChildren() - 1);
-                builder.append(getString(obj, prefix + (isTail ? "    " : "│   "), true));
-            }
-        }
-
-        return builder.toString();
     }
 
     private ArrayList<Book> getBooks(BTreeNode node) {
@@ -506,15 +343,11 @@ public class BTree {
             if (node.children != null) {
                 for (int i = 0; i < node.numberOfChildren() - 1; i++) {
                     BTreeNode obj = node.getChild(i);
-                    for (Book book : getBooks(obj)) {
-                        arrayList.add(book);
-                    }
+                    arrayList.addAll(getBooks(obj));
                 }
                 if (node.numberOfChildren() >= 1) {
                     BTreeNode obj = node.getChild(node.numberOfChildren() - 1);
-                    for (Book book : getBooks(obj)) {
-                        arrayList.add(book);
-                    }
+                    arrayList.addAll(getBooks(obj));
                 }
             }
         }
@@ -523,7 +356,7 @@ public class BTree {
 
     public String graph(BTreeNode aux) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n\tnode" + aux.keys[0].getISBN() + "[label=\"");
+        stringBuilder.append("\n\tnode").append(aux.keys[0].getISBN()).append("[label=\"");
 
         int n = aux.numberOfKeys();
         boolean isLeaf = aux.numberOfChildren() == 0;
@@ -532,7 +365,7 @@ public class BTree {
             if (!isLeaf) {
                 stringBuilder.append("<f").append(i).append(">|");
             }
-            stringBuilder.append(aux.keys[i].getISBN() + " " + aux.keys[i].getTitle());
+            stringBuilder.append(aux.keys[i].getISBN()).append(" ").append(aux.keys[i].getTitle());
             if (i < n - 1) {
                 stringBuilder.append("|");
             }
@@ -555,8 +388,9 @@ public class BTree {
 
         for (int i = 0; i < n + 1; i++) {
             if (!isLeaf) {
-                stringBuilder.append("\n\tnode" + aux.keys[0].getISBN() + ":f"
-                        + i + " -> node" + aux.children[i].keys[0].getISBN() + "[color=\"#E91E63\"];");
+                stringBuilder.append("\n\tnode").append(aux.keys[0].getISBN())
+                        .append(":f").append(i).append(" -> node").append(aux.children[i].keys[0].getISBN())
+                        .append("[color=\"#E91E63\"];");
             }
         }
         return stringBuilder.toString();
